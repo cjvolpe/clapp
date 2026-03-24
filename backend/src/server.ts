@@ -1,15 +1,8 @@
-// environment
 import './bootstrap.js';
-
-// builtin
-
-// external
-import Fastify, { type FastifyInstance } from 'fastify'
-import { setupRoutes } from "./routes.js";
+import Fastify, {type FastifyInstance} from 'fastify'
+// import {setupRoutes} from "./routes.js";
 import supabasePlugin from "./supabase.js";
 import cors from '@fastify/cors';
-
-// internal
 
 
 const FRONTEND_URL: string | undefined = process.env.FRONTEND_URL;
@@ -20,21 +13,20 @@ const fastify: FastifyInstance = Fastify({
 })
 
 
-
 fastify.get('/', async (_request, _reply) => {
 
-    return { hello: 'world' }
+    return {hello: 'world'}
 })
 
 const start = async () => {
     try {
-        await fastify.register(cors,{
+        await fastify.register(cors, {
             origin: "*",
             methods: ["GET", "POST"],
         });
         await fastify.register(supabasePlugin)
-        setupRoutes(fastify);
-        await fastify.listen({ port: 8000 })
+        // setupRoutes(fastify);
+        await fastify.listen({port: 8000})
     } catch (err) {
         fastify.log.error(err)
         process.exit(1)

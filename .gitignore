@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 #API Keys
-/backend/src/.env.development
+/backend/.env.development
