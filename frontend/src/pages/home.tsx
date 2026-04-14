@@ -1,6 +1,7 @@
 import SearchBar from "../components/SearchBar.tsx";
+import "./styles/home.css"
 
-export default function Home(){
+export default function Home() {
 
 
     //
@@ -18,5 +19,7 @@ export default function Home(){
     // }
 
 
-    return(<SearchBar/>)
+    return (<div className={'home-page'}>
+        <SearchBar/>
+    </div>)
 }
