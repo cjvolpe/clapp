@@ -14,8 +14,8 @@ export interface Climb {
 
 export interface Search {
     name: string;
-    lowerDifficulty: RopeGrade | BoulderGrade;
-    upperDifficulty: RopeGrade | BoulderGrade;
+    lowerDifficulty: string;
+    upperDifficulty: string;
     type: string;
     color: Color;
     setter: string;

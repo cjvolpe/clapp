@@ -1,3 +1,5 @@
+import SearchBar from "../components/SearchBar.tsx";
+
 export default function Home(){
 
 
@@ -16,5 +18,5 @@ export default function Home(){
     // }
 
 
-    return(<p>flsda;fsd</p>)
+    return(<SearchBar/>)
 }
