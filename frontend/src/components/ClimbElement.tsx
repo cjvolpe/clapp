@@ -1,12 +1,14 @@
 import type {Climb} from "../lib/types.ts";
+import '../pages/styles/climbelement.css'
 
 export default function ClimbElement({climb}: {climb: Climb}) {
     console.log("ClimbElement", climb);
     const {name, difficulty, type, color, setter, dateSet, gym}:Climb = climb;
+    console.log("Date", dateSet);
     return (<div className={"climb-container"}>
         <div className={"climb-left-column"}>
             <h1>{name}</h1>
-            <div>
+            <div className={'location'}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-geo-alt"
                      viewBox="0 0 16 16">
                     <path
@@ -15,12 +17,12 @@ export default function ClimbElement({climb}: {climb: Climb}) {
                 </svg>
                 <p>{gym} • {type}</p>
             </div>
-            <p>{setter}</p>
+            <p>Set by: {setter}</p>
 
         </div>
         <div className={"climb-right-column"}>
             <h1>{difficulty}</h1>
-            <p>{new Date(dateSet).toDateString()}</p>
+            <p>{dateSet}</p>
             <p>{color.name}</p>
 
         </div>

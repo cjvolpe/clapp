@@ -4,3 +4,11 @@
     align-items: center;
     justify-content: center;
 }
+.climbs{
+    position: fixed;
+    bottom: 50px;
+    width: fit-content;
+    height: 80vh;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}

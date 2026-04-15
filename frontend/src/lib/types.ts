@@ -4,7 +4,7 @@ export interface Climb {
     type: string;
     color: Color;
     setter: string;
-    dateSet: Date;
+    dateSet: string;
     gym: string;
     picture: string;
     archived: boolean;

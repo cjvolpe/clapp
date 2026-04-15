@@ -27,7 +27,7 @@ function Root() {
         return () => subscription.unsubscribe();
     }, []);
 
-    if (loading) return <div> Loading...</div>;
+    if (loading) return <div> Loading...</div>
 
     return (<BrowserRouter>
         <Routes>

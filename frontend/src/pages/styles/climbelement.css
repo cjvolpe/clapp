@@ -1,0 +1,38 @@
+.climb-container{
+    display: flex;
+    border: 2px solid black;
+    border-radius: 16px;
+    margin: 4px;
+    width: 240px;
+}
+h1{
+    margin:6px;
+}
+p{
+    margin:4px;
+}
+.location{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.location p{
+    margin:4px;
+}
+.climb-left-column{
+    display: flex;
+    flex-direction: column;
+    padding: 2px;
+    margin-left: 4px;
+    border-radius:18px;
+}
+.climb-right-column{
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    border-radius:18px;
+    margin-right: 4px;
+}
+.climb-right-column h1{
+    margin:10px;
+}

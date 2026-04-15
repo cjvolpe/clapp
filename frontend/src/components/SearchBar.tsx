@@ -1,10 +1,12 @@
 import {useState} from "react";
 import "./../pages/styles/SearchBar.css";
 
-export default function SearchBar() {
+export default function SearchBar({onSearch}) {
     const [search, setSearch] = useState('');
     const searchAction = async () => {
-        console.log(search);
+        if (search === "") {
+
+        }
 
         const searchResults = await fetch("http://localhost:8000/climbs/search", {
             method: "POST",
@@ -14,8 +16,12 @@ export default function SearchBar() {
             body: JSON.stringify({search: search}),
         });
         const data = await searchResults.json();
-        console.log(data);
-        // onResultsFound(data);
+        console.log('search', data);
+        if (search === "") {
+            onSearch(null);
+        } else {
+            onSearch(data);
+        }
     };
 
 
