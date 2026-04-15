@@ -1,21 +1,30 @@
 import SearchBar from "../components/SearchBar.tsx";
 import "./styles/home.css"
 import HomeRow from "../components/HomeRow.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import ClimbElement from "../components/ClimbElement.tsx";
 
 export default function Home() {
-    const {climbs, setClimbs} = useState();
-    const {loading, setLoading} = useState(false);
+    const [climbs, setClimbs] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
 
-    async function fetchClimbs(): Promise<void> {
-        const response = await fetch("http//localhost:8000/featured", {
-            method: "GET",
-            body: JSON.stringify({})
-        })
-        const data = await reponse.json();
-        setClimbs(data);
 
-    }
+    useEffect(() => {
+        const fetchClimbs = async () => {
+            setLoading(true);
+            const response = await fetch("http://localhost:8000/featured");
+            const data = await response.json();
+            if (data.success) {
+                setClimbs(data.data);
+            } else {
+                console.log("Failed to fetch featured climbs: ", data.error);
+            }
+            setLoading(false);
+            console.log(climbs);
+        }
+        fetchClimbs();
+    },[]);
+
 
 
     //
@@ -35,7 +44,10 @@ export default function Home() {
 
     return (<div className={'home-page'}>
         <SearchBar/>
-<p>{climbs}</p>
+        {climbs.length > 0 ? (climbs.map((climb) => (
+                <ClimbElement key={climb.id} climb={climb}/>
+            ))
+        ) : (loading ? (<p>Loading...</p>) : (<p>No climbs found</p>))}
         <HomeRow/>
-    </div>)
+    </div>);
 }
