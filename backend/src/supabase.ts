@@ -10,7 +10,8 @@ declare module 'fastify' {
 
 //
 const supabaseURL = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SECRET_KEY;
+const supabaseKey = process.env.SUPABASE_KEY;
+
 if (!supabaseURL || !supabaseKey) {
     throw new Error("Supabase URL and KEY must be provided");
 }

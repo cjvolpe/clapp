@@ -1,7 +1,7 @@
 import {useState} from "react";
 import "./../pages/styles/SearchBar.css";
 
-export default function SearchBar({onResultsFound}) {
+export default function SearchBar() {
     const [search, setSearch] = useState('');
     const searchAction = async () => {
         console.log(search);
@@ -15,7 +15,7 @@ export default function SearchBar({onResultsFound}) {
         });
         const data = await searchResults.json();
         console.log(data);
-        onResultsFound(data);
+        // onResultsFound(data);
     };
 
 

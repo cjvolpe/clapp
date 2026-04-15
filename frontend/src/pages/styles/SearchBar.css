@@ -1,3 +1,6 @@
+*{
+    font-size: 16px;
+}
 .search-bar{
     display: flex;
     flex-direction: row;

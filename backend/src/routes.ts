@@ -97,7 +97,7 @@ export function setupRoutes(server: FastifyInstance) {
         return {success: true, data: data};
 
     }
-//TODO: fix difficulty selection
+//TODO: remove for loop
     async function handleFilteredSearch(req: Search): Promise<Task> {
         const {name, lowerDifficulty, upperDifficulty, type, setter, color, startDate, endDate, gym, archived} = req;
         const query = server.supabase.from("climbs").select('*');
