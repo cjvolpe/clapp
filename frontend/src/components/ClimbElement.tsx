@@ -21,6 +21,7 @@ export default function ClimbElement({ climb, climbId, onLog, isSelected }: Clim
     return (<div className={`climb-container ${isSelected ? 'highlighted' : ''}`} onClick={logClimb} >
         <div className={"climb-left-column"}>
             <h1>{name}</h1>
+            <p>Set by: {setter}</p>
             <div className={'location'}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      className="bi bi-geo-alt"
@@ -31,7 +32,6 @@ export default function ClimbElement({ climb, climbId, onLog, isSelected }: Clim
                 </svg>
                 <p>{gym} • {type}</p>
             </div>
-            <p>Set by: {setter}</p>
 
         </div>
         <div className={"climb-right-column"}>
