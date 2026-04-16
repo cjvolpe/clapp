@@ -1,6 +1,5 @@
 import './bootstrap.js';
 import Fastify, {type FastifyInstance} from 'fastify'
-// import {setupRoutes} from "./routes.js";
 import supabasePlugin from "./supabase.js";
 import cors from '@fastify/cors';
 import {setupRoutes} from "./routes.js";
@@ -27,7 +26,10 @@ const start = async () => {
         });
         await fastify.register(supabasePlugin)
         setupRoutes(fastify);
-        await fastify.listen({port: 8000})
+        await fastify.listen({
+            port: 8000,
+            host: "0.0.0.0"
+        })
     } catch (err) {
         fastify.log.error(err)
         process.exit(1)
