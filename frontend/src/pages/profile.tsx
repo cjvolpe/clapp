@@ -49,8 +49,6 @@ export default function Profile() {
     const userName = user?.user_metadata?.name;
     return (<>
             <div className={'profile-page'}>
-
-                <p>profile</p>
                 <div className={'user-info'}>
                     <img className={"profile-picture"} src={avatarUrl} alt={"user's profile picture"}/>
                     <h1>{userName}</h1>

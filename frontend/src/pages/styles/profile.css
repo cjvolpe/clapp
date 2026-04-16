@@ -9,7 +9,7 @@
 }
 .climbs-profile{
     position: fixed;
-    background-color: #757575;
+    left: 39%;
     width: fit-content;
     height: fit-content;
     overflow-y: scroll;
