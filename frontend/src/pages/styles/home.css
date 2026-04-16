@@ -6,9 +6,9 @@
 }
 .climbs{
     position: fixed;
-    bottom: 50px;
+    bottom: 40px;
     width: fit-content;
-    height: 80vh;
+    height: 90vh;
     overflow-y: scroll;
     scrollbar-width: none;
 }

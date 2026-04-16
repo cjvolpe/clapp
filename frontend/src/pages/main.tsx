@@ -7,7 +7,7 @@ import LoginPage from "./login.tsx";
 import ProtectedRoute from "./../components/ProtectedRoute";
 
 import Home from "./home.tsx";
-import LogClimb from "./logclimb.tsx";
+import LogClimb from "./newclimb.tsx";
 import Profile from "./profile.tsx";
 
 function Root() {

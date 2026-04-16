@@ -2,7 +2,7 @@ export interface Climb {
     name: string;
     difficulty: string;
     type: string;
-    color: Color;
+    color: string;
     setter: string;
     dateSet: string;
     gym: string;
@@ -17,7 +17,7 @@ export interface Search {
     lowerDifficulty: string;
     upperDifficulty: string;
     type: string;
-    color: Color;
+    color: string;
     setter: string;
     startDate: Date;
     endDate: Date;
@@ -63,11 +63,25 @@ export const BOULDER_GRADES: Record<string, number> = {
     "V17": 37.0
 };
 
-
-export interface Color {
-    name: string;
-    hex: string;
-}
+export const ROUTE_COLORS: Record<string, string> ={
+    "Red": "#FF0000",
+    "Blue": "#0000FF",
+    "White": "#FFFFFF",
+    "Black": "#000000",
+    "Teal": "#008080",
+    "Green": "#008000",
+    "Lime": "#00FF00",
+    "Orange": "#ff7100",
+    "Purple": "#800080",
+    "Pink": "#FF6EC7",
+    "Wood": "#966F33",
+    "Burnt wood": "#5A3A22",
+    "Brown": "#D2B48C",
+    "Chartreuse": "#D9FF36",
+    "Turquoise": "#40E0D0",
+    "Marble": "#F2F2F2",
+    "Yellow": "#FFC700"
+};
 
 export interface Success<T> {
     success: true;

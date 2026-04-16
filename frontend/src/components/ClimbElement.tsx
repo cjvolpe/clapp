@@ -23,7 +23,7 @@ export default function ClimbElement({climb}: {climb: Climb}) {
         <div className={"climb-right-column"}>
             <h1>{difficulty}</h1>
             <p>{dateSet}</p>
-            <p>{color.name}</p>
+            <p>{color}</p>
 
         </div>
     </div>);
