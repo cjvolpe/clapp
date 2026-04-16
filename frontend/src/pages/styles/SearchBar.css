@@ -13,7 +13,7 @@
     border-radius: 16px;
     padding: 4px 8px;
     gap: 16px;
-    width: fit-content;
+    width: 300px;
     height: fit-content;
 }
 .search-bar input{

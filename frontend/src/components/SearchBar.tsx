@@ -1,5 +1,6 @@
 import {useState} from "react";
 import "./../pages/styles/SearchBar.css";
+import {BACKEND_URL} from "../lib/types.ts";
 
 export default function SearchBar({onSearch}) {
     const [search, setSearch] = useState('');
@@ -8,7 +9,7 @@ export default function SearchBar({onSearch}) {
 
         }
 
-        const searchResults = await fetch("http://localhost:8000/climbs/search", {
+        const searchResults = await fetch(`${BACKEND_URL}/climbs/search`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

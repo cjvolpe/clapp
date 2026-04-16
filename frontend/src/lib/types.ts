@@ -83,7 +83,7 @@ export const ROUTE_COLORS: Record<string, string> ={
     "Purple": "#800080",
     "Pink": "#FF6EC7",
     "Wood": "#966F33",
-    "Burnt wood": "#5A3A22",
+    "Burnt Wood": "#5A3A22",
     "Brown": "#D2B48C",
     "Chartreuse": "#D9FF36",
     "Turquoise": "#40E0D0",
