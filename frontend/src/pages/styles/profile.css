@@ -1,0 +1,18 @@
+.profile-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.logged-climbs{
+
+}
+.climbs-profile{
+    position: fixed;
+    background-color: #757575;
+    width: fit-content;
+    height: fit-content;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    z-index: -1;
+}

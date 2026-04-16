@@ -18,15 +18,28 @@ import {
 export function setupRoutes(server: FastifyInstance) {
     server.get<{
         Reply: any[] | { error: string };
-    }>("/featured", async (request, reply) => {
+    }>("/featured", async (req, res) => {
         const {reply: result, code} = await packageResponse(() => handleFeaturedClimbs());
-        return reply.status(code).send(result);
+        return res.status(code).send(result);
     });
+    server.get<{
+        Reply: any[] | { error: string };
+    }>("/climbs/logged/:uuid", async (req, res) => {
+        const {reply: result, code} = await packageResponse(() => handleLoggedClimbs(req.params));
+        return res.status(code).send(result);
+    });
+    server.get<{
+        Reply: any[] | { error: string };
+    }>("/climbs", async (req, res) => {
+        const {reply: result, code} = await packageResponse(() => handleGetClimbs());
+        return res.status(code).send(result);
+    });
+
     server.post<{
         Body: Climb;
         Reply: BaseReply<void>;
 
-    }>("/climbs", async (req, res) => {
+    }>("/climbs/new", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleNewClimb(req.body));
         res.status(code).send(reply);
     });
@@ -51,6 +64,7 @@ export function setupRoutes(server: FastifyInstance) {
         const {reply, code} = await packageResponse(() => handleSearch(req.body));
         res.status(code).send(reply);
     });
+    //TODO: prevent climbs from being logged twice
     server.post<{
         Body: {
             user: string,
@@ -67,6 +81,16 @@ export function setupRoutes(server: FastifyInstance) {
         twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
         const query = server.supabase.from("climbs")
             .select("*").gte('date_set', twoWeeksAgo.toISOString()).eq("archived", false).order("date_set", {ascending: false});
+        const {data, error} = await query;
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
+
+    }
+
+    async function handleGetClimbs(): Promise<Task> {
+        const query = server.supabase.from("climbs").select("*");
         const {data, error} = await query;
         if (error) {
             return {success: false, error: error, code: 500};
@@ -103,6 +127,15 @@ export function setupRoutes(server: FastifyInstance) {
         }
         return {success: true, data: data};
 
+    }
+
+    async function handleLoggedClimbs(params: { uuid?: string }): Promise<Task> {
+        const {uuid} = params;
+        const {data, error} = await server.supabase.from("completed_climbs").select().eq("climber", uuid);
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
     }
 
 //TODO: remove for loop

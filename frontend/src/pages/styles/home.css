@@ -6,9 +6,18 @@
 }
 .climbs{
     position: fixed;
-    bottom: 40px;
+
+    bottom: 8%;
     width: fit-content;
-    height: 90vh;
+    height: 86vh;
     overflow-y: scroll;
     scrollbar-width: none;
+    z-index: -1;
+}
+.log-button{
+    position: fixed;
+    bottom: 40px;
+    padding: 8px;
+    border-radius: 16px;
+    border: 2px solid black;
 }

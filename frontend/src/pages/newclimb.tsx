@@ -17,7 +17,7 @@ export default function NewClimb() {
             gym: formData.get('gym') as string,
         }
         console.log(newClimb)
-        await fetch("http://localhost:8000/climbs", {
+        await fetch("http://localhost:8000/climbs/new", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
