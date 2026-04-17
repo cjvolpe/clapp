@@ -4,11 +4,8 @@ import {BACKEND_URL} from "../lib/types.ts";
 
 export default function SearchBar({onSearch}) {
     const [search, setSearch] = useState('');
+
     const searchAction = async () => {
-        if (search === "") {
-
-        }
-
         const searchResults = await fetch(`${BACKEND_URL}/climbs/search`, {
             method: "POST",
             headers: {
@@ -24,7 +21,6 @@ export default function SearchBar({onSearch}) {
             onSearch(data);
         }
     };
-
 
     return (
         <div className={"search-bar"}>

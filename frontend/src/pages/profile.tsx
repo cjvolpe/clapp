@@ -29,8 +29,7 @@ export default function Profile() {
             }
             fetchUser();
         }, []
-    )
-    ;
+    );
 
     useEffect(() => {
         if (!user?.id) return;
@@ -45,14 +44,17 @@ export default function Profile() {
         }
         fetchClimbs();
     }, [user]);
+
     const avatarUrl = user?.user_metadata?.avatar_url;
     const userName = user?.user_metadata?.name;
     return (<>
             <div className={'profile-page'}>
+
                 <div className={'user-info'}>
                     <img className={"profile-picture"} src={avatarUrl} alt={"user's profile picture"}/>
                     <h1>{userName}</h1>
                 </div>
+
                 <div className={'logged-climbs'}>
                     <h1>Completed Climbs</h1>
                     <div className={"climbs-profile"}>
@@ -61,7 +63,6 @@ export default function Profile() {
                                 }} isSelected={false}/>
                             ))
                         ) : (loading ? (<p>Loading...</p>) : (<p>No climbs found</p>))}
-
                     </div>
                 </div>
 
