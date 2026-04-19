@@ -8,28 +8,33 @@
     width: 100%;
     align-items: center;
     justify-content: center;
+    background-color: #ECEDED;
 }
 
 .home-button {
     display: flex;
     flex-direction: row;
-    margin-right: 6vw;
+    align-items: center;
+    margin-right: 10vw;
+
 
 }
 
 .add-button {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .profile-button {
-    margin-left: 6vw;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    margin-left: 10vw;
 }
 
 .home-row p {
-    visibility: hidden;
+    display: none;
 }
 
 @media only screen and (min-width: 1600px) {
@@ -40,30 +45,27 @@
         bottom: auto;
         flex-direction: column;
         width: 150px;
-        gap: 40px;
+        gap: 30px;
         align-items: flex-start;
-        margin-left: 20px;
         border-top: none;
         border-right: 2px solid #5B6670;
-
     }
 
     .home-row p {
-        visibility: visible;
+        display: contents;
     }
 
     .home-button {
-
         margin-right: 0;
-
+        margin-left: 20px;
     }
 
     .add-button {
-    }
+        margin-left: 20px;
     }
 
     .profile-button {
-        margin-left: 0;
-
-
+        margin-left: 20px;
     }
+}
+
