@@ -63,17 +63,13 @@
     border: 3px solid black;
 }
 
-.cool-circle {
+.cooler-circle {
     box-shadow: 3px 3px 1px rgba(0, 0, 0, 0.75);
     width: 32px;
     height: 32px;
     border-radius: 50%;
+    margin-right: 16px;
 }
 
-.color-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
 
 

@@ -4,7 +4,7 @@ export interface Climb {
     type: string;
     color: string;
     setter: string;
-    dateSet: string;
+    dateSet: Date;
     gym: string;
     picture: string;
     archived: boolean;
@@ -25,7 +25,7 @@ export interface Search {
     archived: boolean;
 }
 
-export interface Log{
+export interface Log {
     user: string;
     climb: number;
 }
@@ -46,7 +46,6 @@ export const ROPE_GRADES: Record<string, number> = {
     "5.14-": 14.1, "5.14a": 14.1, "5.14b": 14.2, "5.14": 14.25, "5.14c": 14.3, "5.14d": 14.4, "5.14+": 14.4,
     "5.15-": 15.1, "5.15a": 15.1, "5.15b": 15.2, "5.15": 15.25, "5.15c": 15.3, "5.15d": 15.4, "5.15+": 15.4
 };
-
 
 
 export const BOULDER_GRADES: Record<string, number> = {
@@ -71,7 +70,7 @@ export const BOULDER_GRADES: Record<string, number> = {
     "V17": 37.0
 };
 
-export const ROUTE_COLORS: Record<string, string> ={
+export const ROUTE_COLORS: Record<string, string> = {
     "Red": "#FF0000",
     "Blue": "#0000FF",
     "White": "#FFFFFF",

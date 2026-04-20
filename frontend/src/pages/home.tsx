@@ -14,7 +14,6 @@ export default function Home() {
     const [loading, setLoading] = useState(false);
     const [log, setLog] = useState<any>();
     const [user, setUser] = useState<User>();
-    const [search, setSearch] = useState("");
 
 
     useEffect(() => {
@@ -53,7 +52,7 @@ export default function Home() {
     useEffect(() => {
         const handleClick = (event: MouseEvent) => {
             const target = event.target as HTMLElement;
-            if (!target.closest('.climb') && !target.closest('.log-button')) {
+            if (!target.closest('.climb-container') && !target.closest('.log-button')) {
                 setLog(null);
             }
         };
@@ -81,9 +80,9 @@ export default function Home() {
         setLoading(false);
     };
 
-    const onLog = (data) => {
-        console.log(data);
-        setLog(data);
+    const onLog = (key) => {
+        console.log(key);
+        setLog(key);
     }
 
     const handleLogSubmit = async () => {
@@ -108,12 +107,14 @@ export default function Home() {
         <SearchBar onSearch={onSearch}/>
 
         <div className={"climbs"}>
+
             {climbs.length > 0 ? (climbs.map((climb) => (
 
-                    <ClimbElement key={climb.id} climbId={climb.id} climb={climb} onLog={onLog}
+                    <ClimbElement key={climb.id} climbId={climb.id} jsonClimb={climb} onLog={onLog}
                                   isSelected={log === climb.id}/>
                 ))
             ) : (loading ? (<p>Loading...</p>) : (<p>No climbs found</p>))}
+
         </div>
 
         <button

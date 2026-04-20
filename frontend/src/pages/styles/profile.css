@@ -1,19 +1,31 @@
-.profile-page{
+.profile-page {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-.user-info{
+
+.completed-climbs {
+    border: 3px solid black;
+    background-color: #ECEDED;
+    padding: 4px;
+}
+
+.user-info {
+    border: 3px solid black;
+    background-color: #ECEDED;
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin: 16px;
 }
-.user-info img{
+
+.user-info img {
     border-radius: 50%;
 }
-.logged-climbs{
-    top: 20%;
+
+.logged-climbs {
+    top: 25%;
     position: fixed;
     width: fit-content;
     height: 78vh;
@@ -21,24 +33,28 @@
     scrollbar-width: none;
     z-index: -1;
 }
+
 @media only screen and (min-width: 600px) {
     .climbs-profile {
         display: flex;
         flex-direction: column;
     }
 }
+
 @media only screen and (min-width: 768px) {
     .climbs-profile {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
 @media only screen and (min-width: 992px) {
     .climbs-profile {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
 @media only screen and (min-width: 1200px) {
     .climbs-profile {
         display: grid;

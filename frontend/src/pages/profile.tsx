@@ -54,12 +54,12 @@ export default function Profile() {
                     <img className={"profile-picture"} src={avatarUrl} alt={"user's profile picture"}/>
                     <h1>{userName}</h1>
                 </div>
-                <h1>Completed Climbs</h1>
+                <h1 className={"completed-climbs"}>Completed Climbs</h1>
                 <div className={'logged-climbs'}>
 
                     <div className={"climbs-profile"}>
                         {climbs.length > 0 ? (climbs.map((climb) => (
-                                <ClimbElement key={climb.id} climbId={climb.id} climb={climb.climbs} onLog={() => {
+                                <ClimbElement key={climb.id} climbId={climb.id} jsonClimb={climb.climbs} onLog={() => {
                                 }} isSelected={false}/>
                             ))
                         ) : (loading ? (<p>Loading...</p>) : (<p>No climbs found</p>))}

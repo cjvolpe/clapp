@@ -1,24 +1,39 @@
-import type {Climb} from "../lib/types.ts";
+import {type Climb, ROUTE_COLORS} from "../lib/types.ts";
 import '../pages/styles/climbelement.css'
 
 interface ClimbElementProps {
-    climb: Climb;
+    jsonClimb: Climb;
     climbId: number;
     onLog: (climb: Climb) => void;
     isSelected: boolean;
 }
 
-export default function ClimbElement({ climb, climbId, onLog, isSelected }: ClimbElementProps) {
-    console.log("ClimbElement", climb);
-    const {name, difficulty, type, color, setter, dateSet, gym}: Climb = climb;
+export default function ClimbElement({jsonClimb, climbId, onLog, isSelected}: ClimbElementProps) {
+    const climbAdapter = (data) => {
+        return {
+            name: data.name,
+            type: data.type,
+            color: data.color,
+            dateSet: data.date_set,
+            gym: data.gym,
+            setter: data.setter,
+            difficulty: data.difficulty,
+
+        }
+    };
+    const {name, difficulty, type, color, setter, dateSet, gym} = climbAdapter(jsonClimb);
     const logClimb = () => {
         onLog(climbId);
-        console.log("Log Climb", climbId, isSelected);
     }
-    console.log("Date", dateSet);
+    const formatLocalHeader = (dateStr: string) => {
+        const [year, month, day] = dateStr.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        const shortYear = date.getFullYear().toString().slice(-2);
+        return `${month}/${day}/${shortYear}`;
+    };
 
 
-    return (<div className={`climb-container ${isSelected ? 'highlighted' : ''}`} onClick={logClimb} >
+    return (<div className={`climb-container ${isSelected ? 'highlighted' : ''}`} onClick={logClimb}>
         <div className={"climb-left-column"}>
             <h1>{name}</h1>
             <p>Set by: {setter}</p>
@@ -36,8 +51,8 @@ export default function ClimbElement({ climb, climbId, onLog, isSelected }: Clim
         </div>
         <div className={"climb-right-column"}>
             <h1>{difficulty}</h1>
-            <p>{dateSet}</p>
-            <p>{color}</p>
+            <div className={'cooler-circle'} style={{backgroundColor: ROUTE_COLORS[color]}}></div>
+            <h4>{formatLocalHeader(dateSet)}</h4>
         </div>
     </div>);
 
