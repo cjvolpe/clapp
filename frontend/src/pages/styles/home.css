@@ -50,7 +50,8 @@ body {
     z-index: -1;
     padding: 8px;
 }
-.log-button.hidden{
+
+.log-button.hidden {
     display: none;
 }
 

@@ -8,13 +8,13 @@
 .completed-climbs {
     display: flex;
     border: 3px solid black;
-    background-color: #ECEDED;
+    background-color: #EDCDB7;
     padding: 4px;
 }
 
 .user-info {
     border: 3px solid black;
-    background-color: #ECEDED;
+    background-color: #EDCDB7;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -41,21 +41,25 @@
         flex-direction: column;
         height: 50vh;
     }
+
     .logged-climbs {
         height: 54vh;
     }
 }
+
 @media only screen and (min-width: 381px) {
     .climbs-profile {
         display: flex;
         flex-direction: column;
         height: 50vh;
     }
+
     .logged-climbs {
-        top:26.5%;
+        top: 26.5%;
         height: 64vh;
     }
 }
+
 @media only screen and (min-width: 600px) {
     .climbs-profile {
         display: flex;
