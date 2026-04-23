@@ -1,6 +1,6 @@
 import {type Climb, ROUTE_COLORS} from "../lib/types.ts";
 import '../pages/styles/climbelement.css'
-import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 interface ClimbElementProps {
     jsonClimb: Climb;
@@ -10,6 +10,7 @@ interface ClimbElementProps {
 }
 
 export default function ClimbElement({jsonClimb, climbId, onLog, isSelected}: ClimbElementProps) {
+    const navigate = useNavigate();
     const climbAdapter = (data) => {
         return {
             name: data.name,
@@ -54,6 +55,16 @@ export default function ClimbElement({jsonClimb, climbId, onLog, isSelected}: Cl
             <h1>{difficulty}</h1>
             <div className={'cooler-circle'} style={{backgroundColor: ROUTE_COLORS[color]}}></div>
             <h4>{formatLocalHeader(dateSet)}</h4>
+            <button
+                type={"button"}
+                className={'climb-comments-link'}
+                onClick={(event) => {
+                    event.stopPropagation();
+                    navigate(`/climb/${climbId}`);
+                }}
+            >
+                Comments
+            </button>
         </div>
     </div>);
 

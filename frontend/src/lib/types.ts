@@ -28,6 +28,24 @@ export interface Log {
     climb: number;
 }
 
+export interface Comment {
+    id: number;
+    climb: number;
+    author: string;
+    author_name: string | null;
+    author_avatar: string | null;
+    body: string;
+    created_at: string;
+}
+
+export interface NewComment {
+    climb: number;
+    author: string;
+    authorName?: string | null;
+    authorAvatar?: string | null;
+    body: string;
+}
+
 export const BACKEND_URL: string = 'http://localhost:8000';
 export const FRONTEND_URL: string = 'http://localhost:5173';
 
