@@ -62,8 +62,8 @@ export default function Profile() {
 
                     <div className={"climbs-profile"}>
                         {climbs.length > 0 ? (climbs.map((climb) => (
-                                <ClimbElement key={climb.id} climbId={climb.id} jsonClimb={climb.climbs} onLog={() => {
-                                }} isSelected={false}/>
+                                <ClimbElement key={climb.id} climbId={climb.climbs?.id ?? climb.id} jsonClimb={climb.climbs} onLog={() => {
+                                }} isSelected={false} userId={user?.id}/>
                             ))
                         ) : (loading ? (<p>Loading...</p>) : (<p>No climbs found</p>))}
                     </div>

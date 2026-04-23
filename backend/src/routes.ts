@@ -11,7 +11,7 @@ import {
     type Climb,
     type Search,
     ROPE_GRADES,
-    BOULDER_GRADES, type Log
+    BOULDER_GRADES, type Log, type Rating
 } from "../../frontend/src/lib/types.ts";
 
 //TODO: add post request for claiming a set climb, and ticking a climb
@@ -67,6 +67,30 @@ export function setupRoutes(server: FastifyInstance) {
         Reply: BaseReply<void>;
     }>("/climbs/log", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleLog(req.body));
+        res.status(code).send(reply);
+    });
+
+    server.post<{
+        Body: Rating;
+        Reply: BaseReply<void>;
+    }>("/climbs/rate", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleRate(req.body));
+        res.status(code).send(reply);
+    });
+
+    server.get<{
+        Params: { climbId: string };
+        Reply: BaseReply<void>;
+    }>("/climbs/rating/:climbId", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleRatingSummary(req.params));
+        res.status(code).send(reply);
+    });
+
+    server.get<{
+        Params: { climbId: string; userId: string };
+        Reply: BaseReply<void>;
+    }>("/climbs/rating/:climbId/:userId", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleUserRating(req.params));
         res.status(code).send(reply);
     });
 
@@ -222,6 +246,62 @@ export function setupRoutes(server: FastifyInstance) {
             return {success: false, error: error, code: 500};
         }
         return {success: true, data: data};
+    }
+
+
+    async function handleRate(req: Rating): Promise<Task> {
+        const {user, climb, rating} = req;
+        if (!user || !climb || typeof rating !== "number" || rating < 1 || rating > 5 || !Number.isInteger(rating)) {
+            return {success: false, error: new Error("rating must be an integer between 1 and 5"), code: 400};
+        }
+        const {data, error} = await server.supabase
+            .from("climb_ratings")
+            .upsert(
+                {climber: user, climb: climb, rating: rating, updated_at: new Date().toISOString()},
+                {onConflict: "climb,climber"}
+            )
+            .select();
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data as any};
+    }
+
+    async function handleRatingSummary(params: { climbId?: string }): Promise<Task> {
+        const {climbId} = params;
+        if (!climbId) {
+            return {success: false, error: new Error("climbId required"), code: 400};
+        }
+        const {data, error} = await server.supabase
+            .from("climb_ratings")
+            .select("rating")
+            .eq("climb", climbId);
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        const ratings = (data ?? []) as { rating: number }[];
+        const count = ratings.length;
+        const average = count === 0
+            ? 0
+            : Math.round((ratings.reduce((sum, r) => sum + r.rating, 0) / count) * 100) / 100;
+        return {success: true, data: {average, count} as any};
+    }
+
+    async function handleUserRating(params: { climbId?: string; userId?: string }): Promise<Task> {
+        const {climbId, userId} = params;
+        if (!climbId || !userId) {
+            return {success: false, error: new Error("climbId and userId required"), code: 400};
+        }
+        const {data, error} = await server.supabase
+            .from("climb_ratings")
+            .select("rating")
+            .eq("climb", climbId)
+            .eq("climber", userId)
+            .maybeSingle();
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: (data ?? {rating: 0}) as any};
     }
 
 
