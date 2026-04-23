@@ -28,6 +28,17 @@ export interface Log {
     climb: number;
 }
 
+export interface Rating {
+    user: string;
+    climb: number;
+    rating: number;
+}
+
+export interface RatingSummary {
+    average: number;
+    count: number;
+}
+
 export const BACKEND_URL: string = 'http://localhost:8000';
 export const FRONTEND_URL: string = 'http://localhost:5173';
 

@@ -155,7 +155,7 @@ export default function Home() {
             {climbs.length > 0 ? (climbs.map((climb) => (
 
                     <ClimbElement key={climb.id} climbId={climb.id} jsonClimb={climb} onLog={onLog}
-                                  isSelected={log === climb.id}/>
+                                  isSelected={log === climb.id} userId={user?.id}/>
                 ))
             ) : (loading ? (<p>Loading...</p>) : (<p>No climbs found</p>))}
 
