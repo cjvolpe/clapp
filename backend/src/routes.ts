@@ -11,7 +11,7 @@ import {
     type Climb,
     type Search,
     ROPE_GRADES,
-    BOULDER_GRADES, type Log
+    BOULDER_GRADES, type Log, type NewComment
 } from "../../frontend/src/lib/types.ts";
 
 //TODO: add post request for claiming a set climb, and ticking a climb
@@ -33,6 +33,14 @@ export function setupRoutes(server: FastifyInstance) {
     }>("/climbs", async (req, res) => {
         const {reply: result, code} = await packageResponse(() => handleGetClimbs());
         return res.status(code).send(result);
+    });
+
+    server.get<{
+        Params: { id: string };
+        Reply: any | { error: string };
+    }>("/climbs/:id", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleGetClimb(req.params));
+        res.status(code).send(reply);
     });
 
     server.post<{
@@ -67,6 +75,23 @@ export function setupRoutes(server: FastifyInstance) {
         Reply: BaseReply<void>;
     }>("/climbs/log", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleLog(req.body));
+        res.status(code).send(reply);
+    });
+
+    server.get<{
+        Params: { id: string };
+        Reply: any[] | { error: string };
+    }>("/climbs/:id/comments", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleGetComments(req.params));
+        res.status(code).send(reply);
+    });
+
+    server.post<{
+        Params: { id: string };
+        Body: NewComment;
+        Reply: BaseReply<void>;
+    }>("/climbs/:id/comments", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleNewComment(req.params, req.body));
         res.status(code).send(reply);
     });
 
@@ -210,6 +235,68 @@ export function setupRoutes(server: FastifyInstance) {
                 return gradeList.filter(grade => BOULDER_GRADES[grade] <= BOULDER_GRADES[filterGrade]);
             }
         }
+    }
+
+    async function handleGetClimb(params: { id?: string }): Promise<Task> {
+        const climbId = Number(params.id);
+        if (!params.id || Number.isNaN(climbId)) {
+            return {success: false, error: new Error("Invalid climb id"), code: 400};
+        }
+        const {data, error} = await server.supabase
+            .from("climbs")
+            .select("*")
+            .eq("id", climbId)
+            .maybeSingle();
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        if (!data) {
+            return {success: false, error: new Error("Climb not found"), code: 404};
+        }
+        return {success: true, data: data};
+    }
+
+    async function handleGetComments(params: { id?: string }): Promise<Task> {
+        const {id} = params;
+        const climbId = Number(id);
+        if (!id || Number.isNaN(climbId)) {
+            return {success: false, error: new Error("Invalid climb id"), code: 400};
+        }
+        const {data, error} = await server.supabase
+            .from("comments")
+            .select("*")
+            .eq("climb", climbId)
+            .order("created_at", {ascending: true});
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
+    }
+
+    async function handleNewComment(params: { id?: string }, req: NewComment): Promise<Task> {
+        const climbId = Number(params.id);
+        if (!params.id || Number.isNaN(climbId)) {
+            return {success: false, error: new Error("Invalid climb id"), code: 400};
+        }
+        const {author, authorName, authorAvatar, body} = req;
+        const trimmed = typeof body === "string" ? body.trim() : "";
+        if (!author || !trimmed) {
+            return {success: false, error: new Error("author and body are required"), code: 400};
+        }
+        if (trimmed.length > 2000) {
+            return {success: false, error: new Error("body exceeds 2000 characters"), code: 400};
+        }
+        const {data, error} = await server.supabase.from("comments").insert([{
+            climb: climbId,
+            author: author,
+            author_name: authorName ?? null,
+            author_avatar: authorAvatar ?? null,
+            body: trimmed,
+        }]).select();
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
     }
 
     async function handleLog(req: Log): Promise<Task> {

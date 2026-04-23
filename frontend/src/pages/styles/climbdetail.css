@@ -1,0 +1,142 @@
+.climb-detail-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    padding-bottom: 96px;
+    gap: 16px;
+}
+
+.climb-detail-header {
+    border: 3px solid black;
+    background-color: #EDCDB7;
+    border-radius: 16px;
+    padding: 12px 16px;
+    width: 90%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.climb-detail-header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.climb-detail-header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    font-size: 14px;
+}
+
+.climb-detail-header-meta .cooler-circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.climb-comments {
+    width: 90%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.climb-comments h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.comment-item {
+    background-color: #ECEDED;
+    border: 2px solid black;
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.comment-meta {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #333;
+}
+
+.comment-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-body {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 2px solid black;
+    background-color: white;
+    font-family: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.comment-form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #555;
+}
+
+.comment-form button {
+    border: 2px solid black;
+    background-color: #EDCDB7;
+    border-radius: 8px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.comment-form button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.climb-detail-back {
+    align-self: flex-start;
+    margin-left: 5%;
+    border: 2px solid black;
+    background-color: #ECEDED;
+    border-radius: 8px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
