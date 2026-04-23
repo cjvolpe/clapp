@@ -1,0 +1,102 @@
+.snake-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 24px 16px 48px;
+    gap: 16px;
+    font-family: system-ui, sans-serif;
+}
+
+.snake-title {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.snake-scoreboard {
+    display: flex;
+    gap: 24px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.snake-board {
+    position: relative;
+    background-color: #f0e5d1;
+    border: 3px solid #1a1a1a;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.snake-segment {
+    position: absolute;
+    background-color: #2f7a3d;
+    border: 1px solid #1e5128;
+    box-sizing: border-box;
+}
+
+.snake-head {
+    background-color: #3fa255;
+    border-color: #1e5128;
+}
+
+.snake-food {
+    position: absolute;
+    background-color: #d94141;
+    border: 1px solid #7a1f1f;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+.snake-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+}
+
+.snake-overlay-title {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.snake-overlay-sub {
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+.snake-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.snake-controls button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid #1a1a1a;
+    background-color: #edcdb7;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.snake-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.snake-hint {
+    margin: 0;
+    color: #444444;
+    font-size: 13px;
+    text-align: center;
+}

@@ -9,6 +9,7 @@ import ProtectedRoute from "./../components/ProtectedRoute";
 import Home from "./home.tsx";
 import LogClimb from "./newclimb.tsx";
 import Profile from "./profile.tsx";
+import Snake from "./snake.tsx";
 
 function Root() {
     const [session, setSession] = useState<Session | null>(null);
@@ -56,6 +57,7 @@ function Root() {
                     </ProtectedRoute>
                 }
             />
+            <Route path="/snake" element={<Snake/>}/>
         </Routes>
     </BrowserRouter>);
 
