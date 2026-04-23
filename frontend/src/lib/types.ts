@@ -6,11 +6,13 @@ export interface Climb {
     setter: string;
     dateSet: Date;
     gym: string;
-    picture: string;
+    picture?: string | null;
     archived: boolean;
     claimed: boolean;
 
 }
+
+export const CLIMB_IMAGES_BUCKET = "climb-images";
 
 export interface Search {
     lowerDifficulty: string;

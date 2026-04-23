@@ -44,6 +44,14 @@ export function setupRoutes(server: FastifyInstance) {
         res.status(code).send(reply);
     });
 
+    server.get<{
+        Params: { id: string };
+        Reply: any | { error: string };
+    }>("/climbs/:id", async (req, res) => {
+        const {reply: result, code} = await packageResponse(() => handleGetClimb(req.params));
+        return res.status(code).send(result);
+    });
+
     server.patch('/climbs/archive/:id', async (req, res) => {
         const {reply, code} = await packageResponse(() => handleArchive(req.params));
         res.status(code).send(reply);
@@ -93,9 +101,8 @@ export function setupRoutes(server: FastifyInstance) {
 
     }
 
-//TODO: Handle pictures
     async function handleNewClimb(req: Climb): Promise<Task> {
-        const {name, difficulty, type, color, setter, dateSet, gym} = req;
+        const {name, difficulty, type, color, setter, dateSet, gym, picture} = req;
         const {data, error} = await server.supabase.from("climbs").insert([
             {
                 name: name,
@@ -105,10 +112,24 @@ export function setupRoutes(server: FastifyInstance) {
                 setter: setter,
                 date_set: dateSet,
                 gym: gym,
+                picture: picture ?? null,
             }
         ]).select();
         if (error) {
             return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
+    }
+
+    async function handleGetClimb(params: { id?: string }): Promise<Task> {
+        const {id} = params;
+        const {data, error} = await server.supabase.from("climbs")
+            .select("*").eq("id", id).maybeSingle();
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        if (!data) {
+            return {success: false, error: new Error("Climb not found"), code: 404};
         }
         return {success: true, data: data};
     }

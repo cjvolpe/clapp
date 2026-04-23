@@ -1,16 +1,28 @@
-import {type Climb, ROUTE_COLORS} from "../lib/types.ts";
+import {ROUTE_COLORS} from "../lib/types.ts";
 import '../pages/styles/climbelement.css'
-import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+
+interface ClimbRow {
+    name: string;
+    type: string;
+    color: string;
+    date_set: string;
+    gym: string;
+    setter: string;
+    difficulty: string;
+    picture?: string | null;
+}
 
 interface ClimbElementProps {
-    jsonClimb: Climb;
+    jsonClimb: ClimbRow;
     climbId: number;
-    onLog: (climb: Climb) => void;
+    onLog: (climb: number) => void;
     isSelected: boolean;
 }
 
 export default function ClimbElement({jsonClimb, climbId, onLog, isSelected}: ClimbElementProps) {
-    const climbAdapter = (data) => {
+    const navigate = useNavigate();
+    const climbAdapter = (data: ClimbRow) => {
         return {
             name: data.name,
             type: data.type,
@@ -19,10 +31,10 @@ export default function ClimbElement({jsonClimb, climbId, onLog, isSelected}: Cl
             gym: data.gym,
             setter: data.setter,
             difficulty: data.difficulty,
-
+            picture: data.picture,
         }
     };
-    const {name, difficulty, type, color, setter, dateSet, gym} = climbAdapter(jsonClimb);
+    const {name, difficulty, type, color, setter, dateSet, gym, picture} = climbAdapter(jsonClimb);
     const logClimb = () => {
         onLog(climbId);
     }
@@ -33,8 +45,21 @@ export default function ClimbElement({jsonClimb, climbId, onLog, isSelected}: Cl
         return `${month}/${day}/${shortYear}`;
     };
 
+    const openDetails = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        navigate(`/climb/${climbId}`);
+    };
+
 
     return (<div className={`climb-container ${isSelected ? 'highlighted' : ''}`} onClick={logClimb}>
+        {picture && (
+            <img
+                className={'climb-thumbnail'}
+                src={picture}
+                alt={`${name} climb`}
+                onClick={openDetails}
+            />
+        )}
         <div className={"climb-left-column"}>
             <h1>{name}</h1>
             <p>Set by: {setter}</p>
@@ -48,6 +73,9 @@ export default function ClimbElement({jsonClimb, climbId, onLog, isSelected}: Cl
                 </svg>
                 <p>{gym} • {type}</p>
             </div>
+            <button type={'button'} className={'climb-details-link'} onClick={openDetails}>
+                View details
+            </button>
 
         </div>
         <div className={"climb-right-column"}>

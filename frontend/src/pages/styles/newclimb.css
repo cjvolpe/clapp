@@ -80,6 +80,24 @@
     align-items: center;
 }
 
+.picture-field input[type="file"] {
+    border: 2px dashed black;
+    border-radius: 16px;
+    background-color: #ECEDED;
+    padding: 8px;
+    width: 100%;
+}
+
+.picture-preview {
+    display: block;
+    margin-top: 8px;
+    max-width: 100%;
+    max-height: 240px;
+    border-radius: 12px;
+    border: 2px solid black;
+    object-fit: cover;
+}
+
 @media only screen and (min-width: 768px) {
     .add-form-fields {
         display: grid;

@@ -1,0 +1,68 @@
+.climb-detail-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
+}
+
+.climb-detail-page .back-button {
+    align-self: flex-start;
+    border: 2px solid black;
+    border-radius: 12px;
+    background-color: #ECEDED;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.climb-detail-card {
+    background-color: #ECEDED;
+    border: 2px solid black;
+    border-radius: 16px;
+    width: min(480px, 90vw);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.climb-detail-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+}
+
+.climb-detail-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #dcdcdc;
+    color: #555;
+    font-style: italic;
+}
+
+.climb-detail-body {
+    padding: 12px 16px 20px;
+}
+
+.climb-detail-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.climb-detail-heading h1 {
+    font-size: 28px;
+    margin: 8px 0;
+}
+
+.climb-detail-body p {
+    margin: 4px 0;
+}
+
+.archived-tag {
+    color: #a94442;
+    font-weight: bold;
+}
