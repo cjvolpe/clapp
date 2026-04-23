@@ -28,6 +28,29 @@ export interface Log {
     climb: number;
 }
 
+export type NotificationType = "new_climb" | "climb_comment" | "climb_logged" | "system";
+
+export interface Notification {
+    id: number;
+    recipient: string;
+    type: NotificationType;
+    title: string;
+    body: string | null;
+    climb: number | null;
+    actor: string | null;
+    read: boolean;
+    created_at: string;
+}
+
+export interface NewNotification {
+    recipient: string;
+    type: NotificationType;
+    title: string;
+    body?: string;
+    climb?: number;
+    actor?: string;
+}
+
 export const BACKEND_URL: string = 'http://localhost:8000';
 export const FRONTEND_URL: string = 'http://localhost:5173';
 

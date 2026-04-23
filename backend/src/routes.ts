@@ -11,7 +11,9 @@ import {
     type Climb,
     type Search,
     ROPE_GRADES,
-    BOULDER_GRADES, type Log
+    BOULDER_GRADES,
+    type Log,
+    type NewNotification
 } from "../../frontend/src/lib/types.ts";
 
 //TODO: add post request for claiming a set climb, and ticking a climb
@@ -67,6 +69,31 @@ export function setupRoutes(server: FastifyInstance) {
         Reply: BaseReply<void>;
     }>("/climbs/log", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleLog(req.body));
+        res.status(code).send(reply);
+    });
+
+    server.get("/notifications/:uuid", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleGetNotifications(req.params as { uuid?: string }));
+        res.status(code).send(reply);
+    });
+
+    server.get("/notifications/:uuid/unread-count", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleUnreadCount(req.params as { uuid?: string }));
+        res.status(code).send(reply);
+    });
+
+    server.post("/notifications", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleCreateNotification(req.body as NewNotification));
+        res.status(code).send(reply);
+    });
+
+    server.patch("/notifications/:id/read", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleMarkRead(req.params as { id?: string }));
+        res.status(code).send(reply);
+    });
+
+    server.patch("/notifications/:uuid/read-all", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleMarkAllRead(req.params as { uuid?: string }));
         res.status(code).send(reply);
     });
 
@@ -224,6 +251,76 @@ export function setupRoutes(server: FastifyInstance) {
         return {success: true, data: data};
     }
 
+
+    async function handleGetNotifications(params: { uuid?: string }): Promise<Process<any>> {
+        const {uuid} = params;
+        const {data, error} = await server.supabase
+            .from("notifications")
+            .select("*")
+            .eq("recipient", uuid)
+            .order("created_at", {ascending: false})
+            .limit(50);
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
+    }
+
+    async function handleUnreadCount(params: { uuid?: string }): Promise<Process<any>> {
+        const {uuid} = params;
+        const {count, error} = await server.supabase
+            .from("notifications")
+            .select("*", {count: "exact", head: true})
+            .eq("recipient", uuid)
+            .eq("read", false);
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: {count: count ?? 0} as any};
+    }
+
+    async function handleCreateNotification(req: NewNotification): Promise<Process<any>> {
+        const {recipient, type, title, body, climb, actor} = req;
+        const {data, error} = await server.supabase.from("notifications").insert([{
+            recipient,
+            type,
+            title,
+            body: body ?? null,
+            climb: climb ?? null,
+            actor: actor ?? null,
+        }]).select();
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
+    }
+
+    async function handleMarkRead(params: { id?: string }): Promise<Process<any>> {
+        const {id} = params;
+        const {data, error} = await server.supabase
+            .from("notifications")
+            .update({read: true})
+            .eq("id", id)
+            .select();
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
+    }
+
+    async function handleMarkAllRead(params: { uuid?: string }): Promise<Process<any>> {
+        const {uuid} = params;
+        const {data, error} = await server.supabase
+            .from("notifications")
+            .update({read: true})
+            .eq("recipient", uuid)
+            .eq("read", false)
+            .select();
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
+    }
 
     async function packageResponse<O>(handler: () => Promise<Process<O>>,): Promise<ReplyConfig<O>> {
         const result = await handler();

@@ -1,5 +1,6 @@
 import {type NavigateFunction, useNavigate} from "react-router-dom";
 import '../pages/styles/homerow.css'
+import NotificationBell from "./NotificationBell.tsx";
 
 
 export default function HomeRow() {
@@ -22,6 +23,7 @@ export default function HomeRow() {
                 </svg>
                 <p>Add Climb</p>
             </div>
+            <NotificationBell/>
             <div className={'profile-button'} onClick={() => navigate("/profile")}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
                      className="bi bi-person" viewBox="0 0 16 16" >
