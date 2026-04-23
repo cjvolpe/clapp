@@ -3,6 +3,7 @@ import "./styles/home.css"
 import HomeRow from "../components/HomeRow.tsx";
 import {startTransition, useEffect, useOptimistic, useState} from "react";
 import ClimbElement from "../components/ClimbElement.tsx";
+import ClimbOfTheDay from "../components/ClimbOfTheDay.tsx";
 import {supabaseClient} from "../util/supabaseClient.ts";
 import type {User} from "@supabase/supabase-js";
 import {BACKEND_URL, type Search} from "../lib/types.ts";
@@ -149,6 +150,8 @@ export default function Home() {
         <SearchBar onSearch={onSearch} onFilter={onFilter} filtering={filtering}/>
         <FilterClimbs filter={filter} onAdvSearch={onAdvSearch}/>
         <ToastContainer className={'toast'}/>
+
+        <ClimbOfTheDay/>
 
         <div className={"climbs"}>
 

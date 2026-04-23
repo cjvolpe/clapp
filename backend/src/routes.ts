@@ -35,6 +35,13 @@ export function setupRoutes(server: FastifyInstance) {
         return res.status(code).send(result);
     });
 
+    server.get<{
+        Reply: any[] | { error: string };
+    }>("/climbs/of-the-day", async (req, res) => {
+        const {reply: result, code} = await packageResponse(() => handleClimbOfTheDay());
+        return res.status(code).send(result);
+    });
+
     server.post<{
         Body: Climb;
         Reply: BaseReply<void>;
@@ -91,6 +98,21 @@ export function setupRoutes(server: FastifyInstance) {
         }
         return {success: true, data: data};
 
+    }
+
+    async function handleClimbOfTheDay(): Promise<Task> {
+        const {data, error} = await server.supabase.from("climbs")
+            .select("*").eq("archived", false).order("id", {ascending: true});
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        if (!data || data.length === 0) {
+            return {success: true, data: null as any};
+        }
+        const now = new Date();
+        const seed = now.getUTCFullYear() * 10000 + (now.getUTCMonth() + 1) * 100 + now.getUTCDate();
+        const index = seed % data.length;
+        return {success: true, data: data[index]};
     }
 
 //TODO: Handle pictures
