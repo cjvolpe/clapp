@@ -28,6 +28,13 @@ export interface Log {
     climb: number;
 }
 
+export interface UserStats {
+    total: number;
+    byGrade: Record<string, number>;
+    byType: Record<string, number>;
+    currentStreak: number;
+}
+
 export const BACKEND_URL: string = 'http://localhost:8000';
 export const FRONTEND_URL: string = 'http://localhost:5173';
 

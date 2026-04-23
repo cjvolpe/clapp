@@ -11,7 +11,8 @@ import {
     type Climb,
     type Search,
     ROPE_GRADES,
-    BOULDER_GRADES, type Log
+    BOULDER_GRADES, type Log,
+    type UserStats
 } from "../../frontend/src/lib/types.ts";
 
 //TODO: add post request for claiming a set climb, and ticking a climb
@@ -67,6 +68,14 @@ export function setupRoutes(server: FastifyInstance) {
         Reply: BaseReply<void>;
     }>("/climbs/log", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleLog(req.body));
+        res.status(code).send(reply);
+    });
+
+    server.get<{
+        Reply: BaseReply<UserStats>;
+        Params: { uuid: string };
+    }>("/stats/:uuid", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleUserStats(req.params));
         res.status(code).send(reply);
     });
 
@@ -222,6 +231,69 @@ export function setupRoutes(server: FastifyInstance) {
             return {success: false, error: error, code: 500};
         }
         return {success: true, data: data};
+    }
+
+    async function handleUserStats(params: { uuid?: string }): Promise<Process<UserStats>> {
+        const {uuid} = params;
+        const {data, error} = await server.supabase.from("completed_climbs").select(`
+            *,
+            climbs:climb(*)`).eq("climber", uuid);
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        const records = (data ?? []) as Array<{
+            created_at?: string;
+            logged_at?: string;
+            date_logged?: string;
+            climbs?: { difficulty?: string; type?: string } | null;
+        }>;
+
+        const byGrade: Record<string, number> = {};
+        const byType: Record<string, number> = {};
+        for (const r of records) {
+            const climb = r.climbs;
+            if (!climb) continue;
+            const grade = climb.difficulty ?? "Unknown";
+            byGrade[grade] = (byGrade[grade] ?? 0) + 1;
+            const rawType = climb.type ?? "Unknown";
+            const bucket = rawType === "Boulder" ? "Boulder" : rawType === "Top Rope" ? "Top Rope" : rawType;
+            byType[bucket] = (byType[bucket] ?? 0) + 1;
+        }
+
+        const currentStreak = computeStreak(records.map(r => r.created_at ?? r.logged_at ?? r.date_logged).filter((d): d is string => !!d));
+
+        return {
+            success: true,
+            data: {
+                total: records.length,
+                byGrade,
+                byType,
+                currentStreak,
+            },
+        };
+    }
+
+    function computeStreak(isoDates: string[]): number {
+        if (isoDates.length === 0) return 0;
+        const MS_PER_DAY = 86_400_000;
+        const toDayUtc = (iso: string) => {
+            const d = new Date(iso);
+            return Math.floor(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()) / MS_PER_DAY);
+        };
+        const days = new Set(isoDates.map(toDayUtc));
+        const today = Math.floor(Date.UTC(
+            new Date().getUTCFullYear(),
+            new Date().getUTCMonth(),
+            new Date().getUTCDate(),
+        ) / MS_PER_DAY);
+        let cursor = days.has(today) ? today : today - 1;
+        if (!days.has(cursor)) return 0;
+        let streak = 0;
+        while (days.has(cursor)) {
+            streak += 1;
+            cursor -= 1;
+        }
+        return streak;
     }
 
 
