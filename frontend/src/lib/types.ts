@@ -28,6 +28,19 @@ export interface Log {
     climb: number;
 }
 
+export interface ChatMessage {
+    role: "system" | "user" | "assistant";
+    content: string;
+}
+
+export interface ChatRequest {
+    messages: ChatMessage[];
+}
+
+export interface ChatResponse {
+    reply: string;
+}
+
 export const BACKEND_URL: string = 'http://localhost:8000';
 export const FRONTEND_URL: string = 'http://localhost:5173';
 

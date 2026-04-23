@@ -11,8 +11,24 @@ import {
     type Climb,
     type Search,
     ROPE_GRADES,
-    BOULDER_GRADES, type Log
+    BOULDER_GRADES, type Log,
+    type ChatRequest,
+    type ChatResponse,
+    type ChatMessage
 } from "../../frontend/src/lib/types.ts";
+
+const CHATBOT_SYSTEM_PROMPT = `You are Clappy, a friendly climbing assistant inside the Clapp app — a route-logging tool for indoor climbers.
+
+Your job is two-fold:
+1. Answer climbing questions: grades (YDS, V-scale), technique, training, gear, etiquette, safety.
+2. Help users navigate Clapp. Key routes:
+   - /home — browse featured climbs, search, filter, and log a completed climb.
+   - /logclimb — add a brand new route to the gym catalog (name, type, difficulty, color, setter, gym).
+   - /profile — see climbs the user has completed.
+
+Climb types are "Boulder" (V-scale) and "Top Rope" (YDS 5.x). Supported gyms: Fetzer, Ram's Head.
+
+Keep answers concise (2–4 sentences). If a user asks how to do something in the app, tell them which page to go to and what to click. If a question is off-topic or unsafe, politely redirect.`;
 
 //TODO: add post request for claiming a set climb, and ticking a climb
 export function setupRoutes(server: FastifyInstance) {
@@ -67,6 +83,14 @@ export function setupRoutes(server: FastifyInstance) {
         Reply: BaseReply<void>;
     }>("/climbs/log", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleLog(req.body));
+        res.status(code).send(reply);
+    });
+
+    server.post<{
+        Body: ChatRequest;
+        Reply: BaseReply<ChatResponse> | { error: string };
+    }>("/chat", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleChat(req.body));
         res.status(code).send(reply);
     });
 
@@ -209,6 +233,82 @@ export function setupRoutes(server: FastifyInstance) {
             } else if (bound === "upper") {
                 return gradeList.filter(grade => BOULDER_GRADES[grade] <= BOULDER_GRADES[filterGrade]);
             }
+        }
+    }
+
+    async function handleChat(req: ChatRequest): Promise<Process<ChatResponse>> {
+        const apiKey = process.env.OPENAI_API_KEY;
+        const baseUrl = process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1";
+        const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
+
+        if (!apiKey) {
+            return {
+                success: false,
+                error: new Error("Chatbot is not configured: OPENAI_API_KEY env var is missing."),
+                code: 503
+            };
+        }
+
+        if (!req || !Array.isArray(req.messages) || req.messages.length === 0) {
+            return {
+                success: false,
+                error: new Error("messages[] is required"),
+                code: 400
+            };
+        }
+
+        const userFacing: ChatMessage[] = req.messages
+            .filter(m => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
+            .slice(-20)
+            .map(m => ({role: m.role, content: m.content.slice(0, 4000)}));
+
+        const payload = {
+            model,
+            messages: [
+                {role: "system", content: CHATBOT_SYSTEM_PROMPT},
+                ...userFacing
+            ],
+            temperature: 0.4,
+            max_tokens: 400
+        };
+
+        try {
+            const upstream = await fetch(`${baseUrl}/chat/completions`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${apiKey}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!upstream.ok) {
+                const text = await upstream.text();
+                server.log.error({status: upstream.status, body: text}, "chat upstream error");
+                return {
+                    success: false,
+                    error: new Error(`Upstream chat API returned ${upstream.status}`),
+                    code: 502
+                };
+            }
+
+            const data: any = await upstream.json();
+            const reply: string | undefined = data?.choices?.[0]?.message?.content;
+            if (!reply) {
+                return {
+                    success: false,
+                    error: new Error("Upstream chat API returned no content"),
+                    code: 502
+                };
+            }
+            return {success: true, data: {reply}};
+        } catch (err) {
+            server.log.error(err, "chat handler failed");
+            return {
+                success: false,
+                error: err instanceof Error ? err : new Error(String(err)),
+                code: 502
+            };
         }
     }
 
