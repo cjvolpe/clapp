@@ -21,11 +21,22 @@ export interface Search {
     endDate: Date;
     gym: string;
     archived: boolean;
+    tags?: string[];
 }
 
 export interface Log {
     user: string;
     climb: number;
+}
+
+export interface Tag {
+    id: number;
+    name: string;
+}
+
+export interface ClimbTagMutation {
+    climb: number;
+    tag: string;
 }
 
 export const BACKEND_URL: string = 'http://localhost:8000';

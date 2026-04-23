@@ -1,6 +1,6 @@
 import {type Climb, ROUTE_COLORS} from "../lib/types.ts";
 import '../pages/styles/climbelement.css'
-import {useState} from "react";
+import TagChips from "./TagChips.tsx";
 
 interface ClimbElementProps {
     jsonClimb: Climb;
@@ -54,6 +54,9 @@ export default function ClimbElement({jsonClimb, climbId, onLog, isSelected}: Cl
             <h1>{difficulty}</h1>
             <div className={'cooler-circle'} style={{backgroundColor: ROUTE_COLORS[color]}}></div>
             <h4>{formatLocalHeader(dateSet)}</h4>
+        </div>
+        <div className={"climb-tags-row"}>
+            <TagChips climbId={climbId}/>
         </div>
     </div>);
 

@@ -1,0 +1,120 @@
+.tag-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px 6px;
+    align-items: center;
+}
+
+.tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #e4ebf3;
+    color: #1f2a44;
+    border: 1px solid #b7c4d4;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    max-width: 100%;
+}
+
+.tag-chip-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+}
+
+.tag-chip-remove {
+    background: none;
+    border: none;
+    color: #1f2a44;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+}
+
+.tag-chip-remove:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+.tag-chip-add {
+    border: 1px dashed #8a9cb2;
+    background: transparent;
+    color: #1f2a44;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.tag-chip-add:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.tag-chip-form {
+    display: inline-flex;
+}
+
+.tag-chip-input {
+    border: 1px solid #b7c4d4;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 12px;
+    outline: none;
+    width: 100px;
+}
+
+.tag-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+}
+
+.tag-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #e4ebf3;
+    color: #1f2a44;
+    border: 1px solid #b7c4d4;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 12px;
+}
+
+.tag-filter-chip button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    padding: 0;
+}
+
+.tag-filter-input-wrap {
+    display: flex;
+    gap: 4px;
+}
+
+.tag-filter-input-wrap input {
+    border: 1px solid #b7c4d4;
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 12px;
+}
+
+.tag-filter-input-wrap button {
+    border: 1px solid #b7c4d4;
+    background: #f5f7fa;
+    border-radius: 6px;
+    padding: 2px 8px;
+    cursor: pointer;
+    font-size: 12px;
+}
