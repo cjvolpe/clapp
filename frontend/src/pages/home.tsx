@@ -7,6 +7,7 @@ import {supabaseClient} from "../util/supabaseClient.ts";
 import type {User} from "@supabase/supabase-js";
 import {BACKEND_URL, type Search} from "../lib/types.ts";
 import FilterClimbs from "../components/FilterClimbs.tsx";
+import WeatherWidget from "../components/WeatherWidget.tsx";
 import {toast, ToastContainer} from "react-toastify";
 
 export default function Home() {
@@ -149,6 +150,7 @@ export default function Home() {
         <SearchBar onSearch={onSearch} onFilter={onFilter} filtering={filtering}/>
         <FilterClimbs filter={filter} onAdvSearch={onAdvSearch}/>
         <ToastContainer className={'toast'}/>
+        <WeatherWidget/>
 
         <div className={"climbs"}>
 

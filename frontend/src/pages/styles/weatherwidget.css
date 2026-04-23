@@ -1,0 +1,85 @@
+.weather-widget {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: #EDCDB7;
+    border: 2px black solid;
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin: 80px 16px 0;
+    width: min(420px, calc(100% - 32px));
+    box-sizing: border-box;
+    z-index: 2;
+}
+
+.weather-widget.good {
+    background-color: #CDEDB7;
+}
+
+.weather-widget.bad {
+    background-color: #EDB7B7;
+}
+
+.weather-widget.loading,
+.weather-widget.error {
+    background-color: #EDCDB7;
+}
+
+.weather-summary {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.weather-title {
+    font-weight: 600;
+    font-size: 18px;
+    margin: 0;
+}
+
+.weather-temp {
+    font-weight: 700;
+    font-size: 28px;
+    margin: 0;
+}
+
+.weather-meta {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+.weather-verdict {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    padding-top: 8px;
+}
+
+.verdict-label {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.verdict-reason {
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+.weather-detail {
+    font-size: 14px;
+    margin: 0;
+    opacity: 0.85;
+}
+
+@media only screen and (min-width: 768px) {
+    .weather-widget {
+        width: 500px;
+    }
+}
