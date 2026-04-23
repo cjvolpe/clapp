@@ -1,16 +1,25 @@
-import {type Climb, ROUTE_COLORS} from "../lib/types.ts";
+import {ROUTE_COLORS} from "../lib/types.ts";
 import '../pages/styles/climbelement.css'
-import {useState} from "react";
+
+interface ClimbRow {
+    name: string;
+    type: string;
+    color: string;
+    date_set: string;
+    gym: string;
+    setter: string;
+    difficulty: string;
+}
 
 interface ClimbElementProps {
-    jsonClimb: Climb;
+    jsonClimb: ClimbRow;
     climbId: number;
-    onLog: (climb: Climb) => void;
+    onLog: (climbId: number) => void;
     isSelected: boolean;
 }
 
 export default function ClimbElement({jsonClimb, climbId, onLog, isSelected}: ClimbElementProps) {
-    const climbAdapter = (data) => {
+    const climbAdapter = (data: ClimbRow) => {
         return {
             name: data.name,
             type: data.type,

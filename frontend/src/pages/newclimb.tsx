@@ -14,7 +14,7 @@ export default function NewClimb() {
             type: formData.get('type') as string,
             color: formData.get('color') as string,
             setter: formData.get('setter') as string,
-            dateSet: formData.get('dateSet') as Date,
+            dateSet: formData.get('dateSet') as string,
             gym: formData.get('gym') as string,
         }
         console.log(newClimb)

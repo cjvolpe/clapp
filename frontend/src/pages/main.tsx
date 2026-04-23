@@ -9,6 +9,7 @@ import ProtectedRoute from "./../components/ProtectedRoute";
 import Home from "./home.tsx";
 import LogClimb from "./newclimb.tsx";
 import Profile from "./profile.tsx";
+import ClimbDetailPage from "./climbdetail.tsx";
 
 function Root() {
     const [session, setSession] = useState<Session | null>(null);
@@ -53,6 +54,14 @@ function Root() {
                 element={
                     <ProtectedRoute session={session}>
                         <Profile/>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/climbs/:id"
+                element={
+                    <ProtectedRoute session={session}>
+                        <ClimbDetailPage/>
                     </ProtectedRoute>
                 }
             />

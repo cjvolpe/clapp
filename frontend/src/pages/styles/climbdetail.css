@@ -1,0 +1,179 @@
+.climb-detail-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 16px 96px 16px;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.climb-detail-page .back-button {
+    align-self: flex-start;
+    background-color: #EDCDB7;
+    border: 2px solid black;
+    border-radius: 12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.climb-detail-card {
+    width: 100%;
+    border: 3px solid black;
+    border-radius: 16px;
+    background-color: #ECEDED;
+    padding: 16px;
+    margin-bottom: 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: start;
+}
+
+.climb-detail-card h1 {
+    margin: 0 0 4px 0;
+    font-size: 28px;
+}
+
+.climb-detail-card p {
+    margin: 2px 0;
+}
+
+.climb-detail-card .meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.climb-detail-card .visual {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.climb-detail-card .difficulty {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.climb-detail-card .color-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid black;
+}
+
+.climb-detail-section {
+    width: 100%;
+    border: 3px solid black;
+    border-radius: 16px;
+    background-color: #B7EDED;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+}
+
+.climb-detail-section h2 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+}
+
+.loggers-list,
+.comments-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.loggers-list li,
+.comments-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.loggers-list li:last-child,
+.comments-list li:last-child {
+    border-bottom: none;
+}
+
+.rating-summary {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.rating-summary .stars {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.rating-summary .count {
+    color: #444;
+    font-size: 14px;
+}
+
+.rating-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.rating-form select,
+.rating-form button {
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 4px 10px;
+    background: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.comment-form textarea {
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    min-height: 60px;
+    resize: vertical;
+}
+
+.comment-form button {
+    align-self: flex-end;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 6px 14px;
+    background-color: #EDCDB7;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.comment-form button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.comment-meta {
+    font-size: 12px;
+    color: #555;
+    margin: 0 0 4px 0;
+}
+
+.comment-body {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.detail-empty {
+    color: #555;
+    font-style: italic;
+}

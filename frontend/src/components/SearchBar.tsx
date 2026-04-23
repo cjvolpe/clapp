@@ -1,8 +1,13 @@
 import {useEffect, useState} from "react";
 import "./../pages/styles/SearchBar.css";
-import {BACKEND_URL, BOULDER_GRADES, ROPE_GRADES, ROUTE_COLORS} from "../lib/types.ts";
 
-export default function SearchBar({onSearch, onFilter, filtering}) {
+interface SearchBarProps {
+    onSearch: (query: string | null) => void;
+    onFilter: () => void;
+    filtering: boolean;
+}
+
+export default function SearchBar({onSearch, onFilter, filtering}: SearchBarProps) {
     const [search, setSearch] = useState('');
 
     useEffect(() => {

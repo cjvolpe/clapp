@@ -4,7 +4,7 @@ export interface Climb {
     type: string;
     color: string;
     setter: string;
-    dateSet: Date;
+    dateSet: string;
     gym: string;
     picture: string;
     archived: boolean;
@@ -17,8 +17,8 @@ export interface Search {
     upperDifficulty: string;
     type: string;
     color: string;
-    startDate: Date;
-    endDate: Date;
+    startDate: string;
+    endDate: string;
     gym: string;
     archived: boolean;
 }
@@ -26,6 +26,38 @@ export interface Search {
 export interface Log {
     user: string;
     climb: number;
+}
+
+export interface ClimbLogger {
+    climber: string;
+    logged_at?: string;
+}
+
+export interface ClimbRating {
+    id: number;
+    climb: number;
+    climber: string;
+    rating: number;
+    created_at: string;
+}
+
+export interface ClimbComment {
+    id: number;
+    climb: number;
+    climber: string;
+    body: string;
+    created_at: string;
+}
+
+export interface ClimbDetail {
+    climb: Record<string, unknown>;
+    loggers: ClimbLogger[];
+    ratings: {
+        average: number | null;
+        count: number;
+        items: ClimbRating[];
+    };
+    comments: ClimbComment[];
 }
 
 export const BACKEND_URL: string = 'http://localhost:8000';
@@ -112,7 +144,8 @@ export interface FailureReply {
 
 export type BaseReply<T> = SuccessReply<T> | FailureReply;
 export type Process<T> = Success<T> | Failure;
-export type Task = Process<void>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Task<T = any> = Process<T>;
 
 export interface ReplyConfig<T> {
     reply: BaseReply<T>;

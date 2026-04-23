@@ -1,20 +1,31 @@
 import SearchBar from "../components/SearchBar.tsx";
 import "./styles/home.css"
 import HomeRow from "../components/HomeRow.tsx";
-import {startTransition, useEffect, useOptimistic, useState} from "react";
+import {useEffect, useState} from "react";
 import ClimbElement from "../components/ClimbElement.tsx";
 import {supabaseClient} from "../util/supabaseClient.ts";
 import type {User} from "@supabase/supabase-js";
 import {BACKEND_URL, type Search} from "../lib/types.ts";
+
+interface ClimbRow {
+    id: number;
+    name: string;
+    setter: string;
+    color: string;
+    type: string;
+    gym: string;
+    difficulty: string;
+    date_set: string;
+}
 import FilterClimbs from "../components/FilterClimbs.tsx";
 import {toast, ToastContainer} from "react-toastify";
 
 export default function Home() {
-    const [climbs, setClimbs] = useState<any[]>([]);
-    const [featured, setFeatured] = useState<any[]>([]);
+    const [climbs, setClimbs] = useState<ClimbRow[]>([]);
+    const [featured, setFeatured] = useState<ClimbRow[]>([]);
     const [loading, setLoading] = useState(false);
-    const [log, setLog] = useState<any>();
-    const [user, setUser] = useState<User>();
+    const [log, setLog] = useState<number | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [filter, setFilter] = useState<boolean>(false);
     const [advSearch, setAdvSearch] = useState();
     const [filtering, setFiltering] = useState(false);
@@ -75,7 +86,7 @@ export default function Home() {
         setLoading(false);
     }, [advSearch]);
 
-    const onSearch = async (query: string) => {
+    const onSearch = async (query: string | null) => {
         setLoading(true);
         if (query === null) {
             console.log("No featured climbs found");
@@ -95,7 +106,7 @@ export default function Home() {
         setLoading(false);
     };
 
-    const onLog = (key) => {
+    const onLog = (key: number) => {
         console.log(key);
         setLog(key);
     }
@@ -103,7 +114,7 @@ export default function Home() {
         setFilter(!filter);
 
     }
-    const onAdvSearch = async (body: Search) => {
+    const onAdvSearch = async (body: Search | undefined) => {
         if (body === undefined) {
             setAdvSearch(undefined);
             return;

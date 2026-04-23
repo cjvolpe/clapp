@@ -2,7 +2,12 @@ import {BOULDER_GRADES, ROPE_GRADES, ROUTE_COLORS, type Search} from "../lib/typ
 import {useEffect, useState} from "react";
 import '../pages/styles/filterclimbs.css'
 
-export default function FilterClimbs({filter, onAdvSearch}) {
+interface FilterClimbsProps {
+    filter: boolean;
+    onAdvSearch: (body: Search | undefined) => void;
+}
+
+export default function FilterClimbs({filter, onAdvSearch}: FilterClimbsProps) {
     const [type, setType] = useState("Any");
     const [upperDifficulty, setUpperDifficulty] = useState("V17");
     const [color, setColor] = useState("Any");
@@ -17,10 +22,10 @@ export default function FilterClimbs({filter, onAdvSearch}) {
             upperDifficulty: formData.get('upperDifficulty') as string,
             type: formData.get('type') as string,
             color: formData.get('color') as string,
-            startDate: formData.get('startDate') as Date,
-            endDate: formData.get('endDate') as Date,
+            startDate: formData.get('startDate') as string,
+            endDate: formData.get('endDate') as string,
             gym: formData.get('gym') as string,
-            archived: formData.get('archived') as boolean,
+            archived: formData.get('archived') === 'on',
         }
         if (newFilter.archived === null && newFilter.color === "Any" && newFilter.gym === "Any" && newFilter.type === "Any" && newFilter.startDate === "" && newFilter.endDate === "") {
             onAdvSearch(undefined);
@@ -109,7 +114,7 @@ export default function FilterClimbs({filter, onAdvSearch}) {
                 <label className={'archived-climbs'}>
                     <p>Include Archived Climbs</p>
                     <input name={'archived'} type={"checkbox"} checked={archived}
-                           onChange={e => setArchived(e.target.value)}/>
+                           onChange={e => setArchived(e.target.checked)}/>
                 </label>
                 <div className={'advanced-search-bar-buttons'}>
                     <button type="submit"

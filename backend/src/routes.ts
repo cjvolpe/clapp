@@ -12,26 +12,35 @@ import {
     type Search,
     ROPE_GRADES,
     BOULDER_GRADES, type Log
-} from "../../frontend/src/lib/types.ts";
+} from "../../frontend/src/lib/types.js";
 
 //TODO: add post request for claiming a set climb, and ticking a climb
 export function setupRoutes(server: FastifyInstance) {
     server.get<{
-        Reply: any[] | { error: string };
+        Reply: BaseReply<any> | { error: string };
     }>("/featured", async (req, res) => {
         const {reply: result, code} = await packageResponse(() => handleFeaturedClimbs());
         return res.status(code).send(result);
     });
     server.get<{
-        Reply: any[] | { error: string };
+        Params: { uuid: string };
+        Reply: BaseReply<any> | { error: string };
     }>("/climbs/logged/:uuid", async (req, res) => {
         const {reply: result, code} = await packageResponse(() => handleLoggedClimbs(req.params));
         return res.status(code).send(result);
     });
     server.get<{
-        Reply: any[] | { error: string };
+        Reply: BaseReply<any> | { error: string };
     }>("/climbs", async (req, res) => {
         const {reply: result, code} = await packageResponse(() => handleGetClimbs());
+        return res.status(code).send(result);
+    });
+
+    server.get<{
+        Params: { id: string };
+        Reply: any | { error: string };
+    }>("/climbs/:id", async (req, res) => {
+        const {reply: result, code} = await packageResponse(() => handleClimbDetail(req.params));
         return res.status(code).send(result);
     });
 
@@ -44,7 +53,9 @@ export function setupRoutes(server: FastifyInstance) {
         res.status(code).send(reply);
     });
 
-    server.patch('/climbs/archive/:id', async (req, res) => {
+    server.patch<{
+        Params: { id: string };
+    }>('/climbs/archive/:id', async (req, res) => {
         const {reply, code} = await packageResponse(() => handleArchive(req.params));
         res.status(code).send(reply);
 
@@ -123,6 +134,63 @@ export function setupRoutes(server: FastifyInstance) {
 
     }
 
+    async function handleClimbDetail(params: { id?: string }): Promise<Task> {
+        const {id} = params;
+        if (!id) {
+            return {success: false, error: new Error("Missing climb id"), code: 400};
+        }
+        const climbId = Number(id);
+        if (!Number.isFinite(climbId)) {
+            return {success: false, error: new Error("Invalid climb id"), code: 400};
+        }
+
+        const {data: climb, error: climbError} = await server.supabase
+            .from("climbs").select("*").eq("id", climbId).maybeSingle();
+        if (climbError) {
+            return {success: false, error: climbError, code: 500};
+        }
+        if (!climb) {
+            return {success: false, error: new Error("Climb not found"), code: 404};
+        }
+
+        const {data: loggersRaw, error: loggersError} = await server.supabase
+            .from("completed_climbs").select("climber, created_at").eq("climb", climbId);
+        if (loggersError) {
+            return {success: false, error: loggersError, code: 500};
+        }
+        const loggers = (loggersRaw ?? []).map((row: any) => ({
+            climber: row.climber,
+            logged_at: row.created_at,
+        }));
+
+        const ratingsResult = await server.supabase
+            .from("climb_ratings").select("*").eq("climb", climbId);
+        const ratingItems: any[] = ratingsResult.error ? [] : (ratingsResult.data ?? []);
+        const ratingCount = ratingItems.length;
+        const ratingAverage = ratingCount === 0
+            ? null
+            : ratingItems.reduce((sum, r) => sum + Number(r.rating), 0) / ratingCount;
+
+        const commentsResult = await server.supabase
+            .from("climb_comments").select("*").eq("climb", climbId)
+            .order("created_at", {ascending: true});
+        const comments: any[] = commentsResult.error ? [] : (commentsResult.data ?? []);
+
+        return {
+            success: true,
+            data: {
+                climb,
+                loggers,
+                ratings: {
+                    average: ratingAverage,
+                    count: ratingCount,
+                    items: ratingItems,
+                },
+                comments,
+            },
+        };
+    }
+
     async function handleLoggedClimbs(params: { uuid?: string }): Promise<Task> {
         const {uuid} = params;
         const {data, error} = await server.supabase.from("completed_climbs").select(`
@@ -196,20 +264,21 @@ export function setupRoutes(server: FastifyInstance) {
         return {success: true, data: data};
     }
 
-    function sortByGrade(type: string, bound: string, filterGrade: string, gradeList: string[]) {
+    function sortByGrade(type: string, bound: string, filterGrade: string, gradeList: string[]): string[] {
         if (type === "Top Rope") {
             if (bound === "lower") {
-                return gradeList.filter(grade => ROPE_GRADES[grade] >= ROPE_GRADES[filterGrade]);
+                return gradeList.filter(grade => ROPE_GRADES[grade]! >= ROPE_GRADES[filterGrade]!);
             } else if (bound === "upper") {
-                return gradeList.filter(grade => ROPE_GRADES[grade] <= ROPE_GRADES[filterGrade]);
+                return gradeList.filter(grade => ROPE_GRADES[grade]! <= ROPE_GRADES[filterGrade]!);
             }
         } else if (type === "Boulder") {
             if (bound === "lower") {
-                return gradeList.filter(grade => BOULDER_GRADES[grade] >= BOULDER_GRADES[filterGrade]);
+                return gradeList.filter(grade => BOULDER_GRADES[grade]! >= BOULDER_GRADES[filterGrade]!);
             } else if (bound === "upper") {
-                return gradeList.filter(grade => BOULDER_GRADES[grade] <= BOULDER_GRADES[filterGrade]);
+                return gradeList.filter(grade => BOULDER_GRADES[grade]! <= BOULDER_GRADES[filterGrade]!);
             }
         }
+        return gradeList;
     }
 
     async function handleLog(req: Log): Promise<Task> {

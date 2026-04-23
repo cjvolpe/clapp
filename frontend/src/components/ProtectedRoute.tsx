@@ -1,7 +1,8 @@
-import {Navigate, type Session, useLocation} from 'react-router-dom';
+import {Navigate, useLocation} from 'react-router-dom';
+import type {Session} from '@supabase/supabase-js';
 
 interface ProtectedRouteProps {
-    session: Session;
+    session: Session | null;
     children: React.ReactNode;
 }
 
