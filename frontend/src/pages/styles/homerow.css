@@ -26,6 +26,13 @@
     align-items: center;
 }
 
+.sessions-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 10vw;
+}
+
 .profile-button {
     display: flex;
     flex-direction: row;
@@ -62,6 +69,10 @@
     }
 
     .add-button {
+        margin-left: 20px;
+    }
+
+    .sessions-button {
         margin-left: 20px;
     }
 

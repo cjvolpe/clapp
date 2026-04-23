@@ -1,0 +1,190 @@
+.sessions-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 16px;
+    padding-bottom: 96px;
+}
+
+.sessions-page h1 {
+    background-color: #EDCDB7;
+    padding: 6px 10px;
+    border: 3px solid black;
+    font-size: 28px;
+    margin: 16px;
+}
+
+.sessions-list {
+    width: 100%;
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.session-card {
+    border: 3px solid black;
+    border-radius: 16px;
+    background-color: #FFF6EE;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.session-card-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.session-card-date {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.session-card-meta {
+    font-size: 14px;
+    color: #333;
+}
+
+.session-card-notes {
+    font-style: italic;
+    margin-top: 4px;
+}
+
+.session-card-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.session-card-actions button {
+    border: 2px solid black;
+    border-radius: 12px;
+    background-color: #EDCDB7;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.session-card-actions button.danger {
+    background-color: #F4A6A6;
+}
+
+.new-session-button {
+    border: 3px solid black;
+    border-radius: 16px;
+    background-color: #EDCDB7;
+    padding: 8px 16px;
+    margin-bottom: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.session-climb-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-top: 1px dashed #999;
+}
+
+.session-climb-row:first-of-type {
+    border-top: none;
+}
+
+.new-session-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 16px;
+    margin-bottom: 96px;
+}
+
+.new-session-page form {
+    width: 100%;
+    max-width: 720px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.new-session-page label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+}
+
+.new-session-page label p {
+    font-weight: bold;
+    margin: 12px 0 4px 0;
+}
+
+.new-session-page input,
+.new-session-page textarea {
+    border: 2px solid black;
+    border-radius: 16px;
+    outline: none;
+    background-color: #ECEDED;
+    padding: 6px 10px;
+    width: 100%;
+    font-family: inherit;
+}
+
+.new-session-page textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.climb-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 320px;
+    overflow-y: auto;
+    border: 2px solid black;
+    border-radius: 16px;
+    padding: 8px;
+    background-color: #FFF6EE;
+}
+
+.climb-picker-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 6px;
+    border-bottom: 1px dashed #aaa;
+}
+
+.climb-picker-row:last-child {
+    border-bottom: none;
+}
+
+.climb-picker-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.submit-session-button {
+    border: 2px solid black;
+    border-radius: 16px;
+    padding: 8px 10px;
+    margin: 24px 0;
+    width: 100%;
+    background-color: #EDCDB7;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.submit-session-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.empty-state {
+    margin-top: 24px;
+    color: #555;
+}

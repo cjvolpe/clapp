@@ -11,7 +11,9 @@ import {
     type Climb,
     type Search,
     ROPE_GRADES,
-    BOULDER_GRADES, type Log
+    BOULDER_GRADES,
+    type Log,
+    type SessionInput
 } from "../../frontend/src/lib/types.ts";
 
 //TODO: add post request for claiming a set climb, and ticking a climb
@@ -67,6 +69,33 @@ export function setupRoutes(server: FastifyInstance) {
         Reply: BaseReply<void>;
     }>("/climbs/log", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleLog(req.body));
+        res.status(code).send(reply);
+    });
+
+    server.get<{
+        Reply: any[] | { error: string };
+    }>("/sessions/:uuid", async (req, res) => {
+        const {reply: result, code} = await packageResponse(() => handleListSessions(req.params));
+        return res.status(code).send(result);
+    });
+
+    server.get<{
+        Reply: any | { error: string };
+    }>("/sessions/detail/:id", async (req, res) => {
+        const {reply: result, code} = await packageResponse(() => handleGetSession(req.params));
+        return res.status(code).send(result);
+    });
+
+    server.post<{
+        Body: SessionInput;
+        Reply: BaseReply<void>;
+    }>("/sessions/new", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleNewSession(req.body));
+        res.status(code).send(reply);
+    });
+
+    server.delete("/sessions/:id", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleDeleteSession(req.params));
         res.status(code).send(reply);
     });
 
@@ -224,6 +253,86 @@ export function setupRoutes(server: FastifyInstance) {
         return {success: true, data: data};
     }
 
+
+    async function handleListSessions(params: { uuid?: string }): Promise<Task> {
+        const {uuid} = params;
+        const {data, error} = await server.supabase
+            .from("sessions")
+            .select("*")
+            .eq("climber", uuid)
+            .order("session_date", {ascending: false});
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
+    }
+
+    async function handleGetSession(params: { id?: string }): Promise<Task> {
+        const {id} = params;
+        const {data, error} = await server.supabase
+            .from("sessions")
+            .select(`
+                *,
+                session_climbs:session_climbs (
+                    id,
+                    completed_climb_id,
+                    completed_climbs:completed_climb_id (
+                        *,
+                        climbs:climb(*)
+                    )
+                )
+            `)
+            .eq("id", id)
+            .maybeSingle();
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
+    }
+
+    async function handleNewSession(req: SessionInput): Promise<Task> {
+        const {user, sessionDate, durationMin, notes, completedClimbIds} = req;
+        if (!user || !sessionDate) {
+            return {success: false, error: new Error("user and sessionDate are required"), code: 400};
+        }
+        const {data: sessionRows, error: sessionErr} = await server.supabase
+            .from("sessions")
+            .insert([{
+                climber: user,
+                session_date: sessionDate,
+                duration_min: durationMin,
+                notes: notes,
+            }])
+            .select();
+        if (sessionErr) {
+            return {success: false, error: sessionErr, code: 500};
+        }
+        const sessionId = sessionRows?.[0]?.id;
+        if (sessionId && completedClimbIds && completedClimbIds.length > 0) {
+            const rows = completedClimbIds.map((cid) => ({
+                session_id: sessionId,
+                completed_climb_id: cid,
+            }));
+            const {error: joinErr} = await server.supabase.from("session_climbs").insert(rows);
+            if (joinErr) {
+                return {success: false, error: joinErr, code: 500};
+            }
+        }
+        return {success: true, data: sessionRows};
+    }
+
+    async function handleDeleteSession(params: { id?: string }): Promise<Task> {
+        const {id} = params;
+        const {data, error} = await server.supabase
+            .from("sessions")
+            .delete()
+            .eq("id", id)
+            .select();
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
+    }
 
     async function packageResponse<O>(handler: () => Promise<Process<O>>,): Promise<ReplyConfig<O>> {
         const result = await handler();

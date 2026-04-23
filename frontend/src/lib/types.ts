@@ -28,6 +28,32 @@ export interface Log {
     climb: number;
 }
 
+export interface SessionInput {
+    user: string;
+    sessionDate: string;
+    durationMin: number | null;
+    notes: string;
+    completedClimbIds: number[];
+}
+
+export interface SessionRecord {
+    id: number;
+    climber: string;
+    session_date: string;
+    duration_min: number | null;
+    notes: string | null;
+    created_at: string;
+    session_climbs?: Array<{
+        id: number;
+        completed_climb_id: number;
+        completed_climbs?: {
+            id: number;
+            climb: number;
+            climbs?: Climb & { id: number };
+        } | null;
+    }>;
+}
+
 export const BACKEND_URL: string = 'http://localhost:8000';
 export const FRONTEND_URL: string = 'http://localhost:5173';
 

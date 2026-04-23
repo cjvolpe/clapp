@@ -9,6 +9,8 @@ import ProtectedRoute from "./../components/ProtectedRoute";
 import Home from "./home.tsx";
 import LogClimb from "./newclimb.tsx";
 import Profile from "./profile.tsx";
+import Sessions from "./sessions.tsx";
+import NewSession from "./newsession.tsx";
 
 function Root() {
     const [session, setSession] = useState<Session | null>(null);
@@ -53,6 +55,22 @@ function Root() {
                 element={
                     <ProtectedRoute session={session}>
                         <Profile/>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/sessions"
+                element={
+                    <ProtectedRoute session={session}>
+                        <Sessions/>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/sessions/new"
+                element={
+                    <ProtectedRoute session={session}>
+                        <NewSession/>
                     </ProtectedRoute>
                 }
             />
