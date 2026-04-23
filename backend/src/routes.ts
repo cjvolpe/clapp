@@ -4,32 +4,32 @@
 import type {FastifyInstance} from "fastify";
 import {
     type BaseReply,
-    type Failure,
     type ReplyConfig,
-    type Task,
     type Process,
     type Climb,
     type Search,
     ROPE_GRADES,
-    BOULDER_GRADES, type Log
-} from "../../frontend/src/lib/types.ts";
+    BOULDER_GRADES, type Log,
+    type ClimbTagMutation
+} from "../../frontend/src/lib/types.js";
 
 //TODO: add post request for claiming a set climb, and ticking a climb
 export function setupRoutes(server: FastifyInstance) {
     server.get<{
-        Reply: any[] | { error: string };
+        Reply: BaseReply<any>;
     }>("/featured", async (req, res) => {
         const {reply: result, code} = await packageResponse(() => handleFeaturedClimbs());
         return res.status(code).send(result);
     });
     server.get<{
-        Reply: any[] | { error: string };
+        Params: { uuid?: string };
+        Reply: BaseReply<any>;
     }>("/climbs/logged/:uuid", async (req, res) => {
         const {reply: result, code} = await packageResponse(() => handleLoggedClimbs(req.params));
         return res.status(code).send(result);
     });
     server.get<{
-        Reply: any[] | { error: string };
+        Reply: BaseReply<any>;
     }>("/climbs", async (req, res) => {
         const {reply: result, code} = await packageResponse(() => handleGetClimbs());
         return res.status(code).send(result);
@@ -37,14 +37,16 @@ export function setupRoutes(server: FastifyInstance) {
 
     server.post<{
         Body: Climb;
-        Reply: BaseReply<void>;
+        Reply: BaseReply<any>;
 
     }>("/climbs/new", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleNewClimb(req.body));
         res.status(code).send(reply);
     });
 
-    server.patch('/climbs/archive/:id', async (req, res) => {
+    server.patch<{
+        Params: { id?: string };
+    }>('/climbs/archive/:id', async (req, res) => {
         const {reply, code} = await packageResponse(() => handleArchive(req.params));
         res.status(code).send(reply);
 
@@ -52,7 +54,7 @@ export function setupRoutes(server: FastifyInstance) {
 
     server.post<{
         Body: Search;
-        Reply: BaseReply<void>;
+        Reply: BaseReply<any>;
     }>("/climbs/search/filter", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleFilteredSearch(req.body));
         res.status(code).send(reply);
@@ -64,13 +66,44 @@ export function setupRoutes(server: FastifyInstance) {
             user: string,
             climb: number
         };
-        Reply: BaseReply<void>;
+        Reply: BaseReply<any>;
     }>("/climbs/log", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleLog(req.body));
         res.status(code).send(reply);
     });
 
-    async function handleFeaturedClimbs(): Promise<Task> {
+    server.get<{
+        Reply: BaseReply<any>;
+    }>("/tags", async (_req, res) => {
+        const {reply, code} = await packageResponse(() => handleListTags());
+        return res.status(code).send(reply);
+    });
+
+    server.get<{
+        Params: { id?: string };
+        Reply: BaseReply<any>;
+    }>("/climbs/:id/tags", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleGetClimbTags(req.params));
+        return res.status(code).send(reply);
+    });
+
+    server.post<{
+        Body: ClimbTagMutation;
+        Reply: BaseReply<any>;
+    }>("/climbs/tags/add", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleAddTag(req.body));
+        res.status(code).send(reply);
+    });
+
+    server.post<{
+        Body: ClimbTagMutation;
+        Reply: BaseReply<any>;
+    }>("/climbs/tags/remove", async (req, res) => {
+        const {reply, code} = await packageResponse(() => handleRemoveTag(req.body));
+        res.status(code).send(reply);
+    });
+
+    async function handleFeaturedClimbs(): Promise<Process<unknown>> {
         const twoWeeksAgo = new Date();
         twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
         const query = server.supabase.from("climbs")
@@ -83,7 +116,7 @@ export function setupRoutes(server: FastifyInstance) {
 
     }
 
-    async function handleGetClimbs(): Promise<Task> {
+    async function handleGetClimbs(): Promise<Process<unknown>> {
         const query = server.supabase.from("climbs").select("*");
         const {data, error} = await query;
         if (error) {
@@ -94,7 +127,7 @@ export function setupRoutes(server: FastifyInstance) {
     }
 
 //TODO: Handle pictures
-    async function handleNewClimb(req: Climb): Promise<Task> {
+    async function handleNewClimb(req: Climb): Promise<Process<unknown>> {
         const {name, difficulty, type, color, setter, dateSet, gym} = req;
         const {data, error} = await server.supabase.from("climbs").insert([
             {
@@ -113,7 +146,7 @@ export function setupRoutes(server: FastifyInstance) {
         return {success: true, data: data};
     }
 
-    async function handleArchive(params: { id?: string }): Promise<Task> {
+    async function handleArchive(params: { id?: string }): Promise<Process<unknown>> {
         const {id} = params;
         const {data, error} = await server.supabase.from("climbs").update({archived: true}).eq("id", id).select();
         if (error) {
@@ -123,7 +156,7 @@ export function setupRoutes(server: FastifyInstance) {
 
     }
 
-    async function handleLoggedClimbs(params: { uuid?: string }): Promise<Task> {
+    async function handleLoggedClimbs(params: { uuid?: string }): Promise<Process<unknown>> {
         const {uuid} = params;
         const {data, error} = await server.supabase.from("completed_climbs").select(`
             *,
@@ -135,9 +168,38 @@ export function setupRoutes(server: FastifyInstance) {
     }
 
 //TODO: remove for loop
-    async function handleFilteredSearch(req: Search): Promise<Task> {
-        const {lowerDifficulty, upperDifficulty, type, color, startDate, endDate, gym, archived} = req;
+    async function handleFilteredSearch(req: Search): Promise<Process<unknown>> {
+        const {lowerDifficulty, upperDifficulty, type, color, startDate, endDate, gym, archived, tags} = req;
         const query = server.supabase.from("climbs").select('*');
+
+        if (tags && tags.length > 0) {
+            const cleanTags = tags.map(normalizeTagName).filter(Boolean);
+            if (cleanTags.length > 0) {
+                const {data: matchedTags, error: tagErr} = await server.supabase
+                    .from("tags")
+                    .select("id,name")
+                    .or(cleanTags.map(t => `name.ilike.${t}`).join(","));
+                if (tagErr) {
+                    return {success: false, error: tagErr, code: 500};
+                }
+                const tagIds = (matchedTags ?? []).map((t: any) => t.id);
+                if (tagIds.length === 0) {
+                    return {success: true, data: []};
+                }
+                const {data: links, error: linkErr} = await server.supabase
+                    .from("climb_tags")
+                    .select("climb")
+                    .in("tag", tagIds);
+                if (linkErr) {
+                    return {success: false, error: linkErr, code: 500};
+                }
+                const climbIds = Array.from(new Set((links ?? []).map((l: any) => l.climb)));
+                if (climbIds.length === 0) {
+                    return {success: true, data: []};
+                }
+                query.in("id", climbIds);
+            }
+        }
         let boulderList: string[] = Object.keys(BOULDER_GRADES);
         let ropeList: string[] = Object.keys(ROPE_GRADES);
         const filter: Record<string, any> = {
@@ -196,23 +258,123 @@ export function setupRoutes(server: FastifyInstance) {
         return {success: true, data: data};
     }
 
-    function sortByGrade(type: string, bound: string, filterGrade: string, gradeList: string[]) {
-        if (type === "Top Rope") {
-            if (bound === "lower") {
-                return gradeList.filter(grade => ROPE_GRADES[grade] >= ROPE_GRADES[filterGrade]);
-            } else if (bound === "upper") {
-                return gradeList.filter(grade => ROPE_GRADES[grade] <= ROPE_GRADES[filterGrade]);
-            }
-        } else if (type === "Boulder") {
-            if (bound === "lower") {
-                return gradeList.filter(grade => BOULDER_GRADES[grade] >= BOULDER_GRADES[filterGrade]);
-            } else if (bound === "upper") {
-                return gradeList.filter(grade => BOULDER_GRADES[grade] <= BOULDER_GRADES[filterGrade]);
-            }
+    function sortByGrade(type: string, bound: string, filterGrade: string, gradeList: string[]): string[] {
+        const table = type === "Top Rope" ? ROPE_GRADES : type === "Boulder" ? BOULDER_GRADES : null;
+        if (!table) return gradeList;
+        const threshold = table[filterGrade];
+        if (threshold === undefined) return gradeList;
+        if (bound === "lower") {
+            return gradeList.filter(grade => (table[grade] ?? -Infinity) >= threshold);
         }
+        if (bound === "upper") {
+            return gradeList.filter(grade => (table[grade] ?? Infinity) <= threshold);
+        }
+        return gradeList;
     }
 
-    async function handleLog(req: Log): Promise<Task> {
+    function normalizeTagName(raw: string): string {
+        return raw.trim().replace(/\s+/g, " ");
+    }
+
+    async function handleListTags(): Promise<Process<unknown>> {
+        const {data, error} = await server.supabase.from("tags").select("id,name").order("name", {ascending: true});
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: data};
+    }
+
+    async function handleGetClimbTags(params: { id?: string }): Promise<Process<unknown>> {
+        const {id} = params;
+        if (!id) {
+            return {success: false, error: new Error("Missing climb id"), code: 400};
+        }
+        const {data, error} = await server.supabase
+            .from("climb_tags")
+            .select("tags:tag(id,name)")
+            .eq("climb", id);
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        const tags = (data ?? []).map((row: any) => row.tags).filter(Boolean);
+        return {success: true, data: tags};
+    }
+
+    async function upsertTagByName(name: string): Promise<{ id: number; name: string } | { error: Error }> {
+        const clean = normalizeTagName(name);
+        if (!clean) {
+            return {error: new Error("Tag name cannot be empty")};
+        }
+        const existing = await server.supabase
+            .from("tags")
+            .select("id,name")
+            .ilike("name", clean)
+            .maybeSingle();
+        if (existing.error) {
+            return {error: existing.error};
+        }
+        if (existing.data) {
+            return {id: existing.data.id, name: existing.data.name};
+        }
+        const inserted = await server.supabase
+            .from("tags")
+            .insert([{name: clean}])
+            .select("id,name")
+            .single();
+        if (inserted.error) {
+            return {error: inserted.error};
+        }
+        return {id: inserted.data.id, name: inserted.data.name};
+    }
+
+    async function handleAddTag(req: ClimbTagMutation): Promise<Process<unknown>> {
+        const {climb, tag} = req;
+        if (climb === undefined || climb === null || !tag) {
+            return {success: false, error: new Error("climb and tag are required"), code: 400};
+        }
+        const resolved = await upsertTagByName(tag);
+        if ("error" in resolved) {
+            return {success: false, error: resolved.error, code: 500};
+        }
+        const {data, error} = await server.supabase
+            .from("climb_tags")
+            .upsert([{climb: climb, tag: resolved.id}], {onConflict: "climb,tag"})
+            .select();
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: {climb, tag: resolved, rows: data}};
+    }
+
+    async function handleRemoveTag(req: ClimbTagMutation): Promise<Process<unknown>> {
+        const {climb, tag} = req;
+        if (climb === undefined || climb === null || !tag) {
+            return {success: false, error: new Error("climb and tag are required"), code: 400};
+        }
+        const clean = normalizeTagName(tag);
+        const lookup = await server.supabase
+            .from("tags")
+            .select("id")
+            .ilike("name", clean)
+            .maybeSingle();
+        if (lookup.error) {
+            return {success: false, error: lookup.error, code: 500};
+        }
+        if (!lookup.data) {
+            return {success: true, data: {removed: 0}};
+        }
+        const {error} = await server.supabase
+            .from("climb_tags")
+            .delete()
+            .eq("climb", climb)
+            .eq("tag", lookup.data.id);
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+        return {success: true, data: {removed: 1}};
+    }
+
+    async function handleLog(req: Log): Promise<Process<unknown>> {
         const {user, climb} = req;
         const {data, error} = await server.supabase.from("completed_climbs").insert([{
             climber: user,

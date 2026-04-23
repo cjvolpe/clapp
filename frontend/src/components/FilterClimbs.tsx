@@ -1,6 +1,7 @@
 import {BOULDER_GRADES, ROPE_GRADES, ROUTE_COLORS, type Search} from "../lib/types.ts";
 import {useEffect, useState} from "react";
 import '../pages/styles/filterclimbs.css'
+import '../pages/styles/tagchips.css'
 
 export default function FilterClimbs({filter, onAdvSearch}) {
     const [type, setType] = useState("Any");
@@ -10,6 +11,23 @@ export default function FilterClimbs({filter, onAdvSearch}) {
     const [archived, setArchived] = useState<boolean>(false);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [tags, setTags] = useState<string[]>([]);
+    const [tagDraft, setTagDraft] = useState("");
+
+    const addTagToFilter = () => {
+        const name = tagDraft.trim();
+        if (!name) return;
+        if (tags.some(t => t.toLowerCase() === name.toLowerCase())) {
+            setTagDraft("");
+            return;
+        }
+        setTags([...tags, name]);
+        setTagDraft("");
+    };
+
+    const removeTagFromFilter = (name: string) => {
+        setTags(tags.filter(t => t !== name));
+    };
 
     const advancedSearch = (formData: FormData) => {
         const newFilter: Search = {
@@ -21,8 +39,9 @@ export default function FilterClimbs({filter, onAdvSearch}) {
             endDate: formData.get('endDate') as Date,
             gym: formData.get('gym') as string,
             archived: formData.get('archived') as boolean,
+            tags: tags.length > 0 ? tags : undefined,
         }
-        if (newFilter.archived === null && newFilter.color === "Any" && newFilter.gym === "Any" && newFilter.type === "Any" && newFilter.startDate === "" && newFilter.endDate === "") {
+        if (newFilter.archived === null && newFilter.color === "Any" && newFilter.gym === "Any" && newFilter.type === "Any" && newFilter.startDate === "" && newFilter.endDate === "" && (!newFilter.tags || newFilter.tags.length === 0)) {
             onAdvSearch(undefined);
             return;
         }
@@ -106,6 +125,35 @@ export default function FilterClimbs({filter, onAdvSearch}) {
                 </label>
 
 
+                <label className={'tags-filter'}>
+                    <p>Tags</p>
+                    <div className={'tag-filter-chips'}>
+                        {tags.map(t => (
+                            <span key={t} className={'tag-filter-chip'}>
+                                {t}
+                                <button type={'button'} aria-label={`Remove ${t}`}
+                                        onClick={() => removeTagFromFilter(t)}>×</button>
+                            </span>
+                        ))}
+                    </div>
+                    <div className={'tag-filter-input-wrap'}>
+                        <input
+                            type={'text'}
+                            value={tagDraft}
+                            onChange={e => setTagDraft(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    addTagToFilter();
+                                }
+                            }}
+                            placeholder={'e.g. crimpy'}
+                            maxLength={40}
+                        />
+                        <button type={'button'} onClick={addTagToFilter}>Add</button>
+                    </div>
+                </label>
+
                 <label className={'archived-climbs'}>
                     <p>Include Archived Climbs</p>
                     <input name={'archived'} type={"checkbox"} checked={archived}
@@ -128,6 +176,8 @@ export default function FilterClimbs({filter, onAdvSearch}) {
                         setEndDate("");
                         setGym("Any");
                         setArchived(false);
+                        setTags([]);
+                        setTagDraft("");
                         onAdvSearch(undefined);
                     }}>Clear Filters
                     </button>
