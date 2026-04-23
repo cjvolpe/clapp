@@ -61,6 +61,29 @@
     display: none;
 }
 
+html.dark .advanced-search-bar.show {
+    background-color: #1e293b;
+    border-color: #e5e7eb;
+    color: #e5e7eb;
+}
+
+html.dark .advanced-search-bar input,
+html.dark .advanced-search-bar select {
+    background-color: #0f172a;
+    color: #e5e7eb;
+    border-color: #475569;
+}
+
+html.dark .advanced-search-bar button {
+    background-color: #334155;
+    color: #e5e7eb;
+    border-color: #e5e7eb;
+}
+
+html.dark .archived-climbs {
+    border-color: #e5e7eb;
+}
+
 .filter-r1 {
     display: flex;
     flex-direction: row;

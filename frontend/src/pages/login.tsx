@@ -1,6 +1,7 @@
 import { supabaseClient} from "../util/supabaseClient.ts";
 import "./styles/login.css";
 import {FRONTEND_URL} from "../lib/types.ts";
+import ThemeToggle from "../components/ThemeToggle.tsx";
 
 export default function LoginPage() {
 
@@ -18,6 +19,9 @@ export default function LoginPage() {
 
     return (
         <>
+            <div className="fixed right-4 top-4 z-20">
+                <ThemeToggle/>
+            </div>
             <div className="login-page">
                 <h1>Clapp</h1>
                 <h4>UNC's Mountain Project</h4>
