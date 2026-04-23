@@ -2,13 +2,18 @@ import {createRoot} from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from "react-router";
 import {useEffect, useState} from "react";
 import type {Session} from "@supabase/supabase-js";
+import "../index.css";
 import { supabaseClient} from "../util/supabaseClient.ts";
+import {ThemeProvider} from "../util/theme.tsx";
+import {applyInitialTheme} from "../util/themeRuntime.ts";
 import LoginPage from "./login.tsx";
 import ProtectedRoute from "./../components/ProtectedRoute";
 
 import Home from "./home.tsx";
 import LogClimb from "./newclimb.tsx";
 import Profile from "./profile.tsx";
+
+applyInitialTheme();
 
 function Root() {
     const [session, setSession] = useState<Session | null>(null);
@@ -29,7 +34,7 @@ function Root() {
 
     if (loading) return <div> Loading...</div>
 
-    return (<BrowserRouter>
+    return (<ThemeProvider><BrowserRouter>
         <Routes>
             <Route index element={<LoginPage/>}/>
             <Route
@@ -57,7 +62,7 @@ function Root() {
                 }
             />
         </Routes>
-    </BrowserRouter>);
+    </BrowserRouter></ThemeProvider>);
 
 }
 

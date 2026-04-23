@@ -59,3 +59,24 @@ img {
     margin-top: 12vw;
     padding: 16px;
 }
+
+html.dark body {
+    background-color: #0f172a;
+    color: #e5e7eb;
+}
+
+html.dark .login-page,
+html.dark .login-page h1,
+html.dark .login-page h4 {
+    color: #e5e7eb;
+}
+
+html.dark .google-btn {
+    background-color: #1e293b;
+    color: #e5e7eb;
+    border-color: #334155;
+}
+
+html.dark .google-btn:hover {
+    background-color: #334155;
+}

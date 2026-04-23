@@ -35,6 +35,23 @@
     border-radius: 50%;
 }
 
+html.dark body {
+    background-color: #0b1220;
+    color: #e5e7eb;
+}
+
+html.dark .profile-page,
+html.dark .profile-page h1 {
+    color: #e5e7eb;
+}
+
+html.dark .completed-climbs,
+html.dark .user-info {
+    background-color: #1e293b;
+    border-color: #e5e7eb;
+    color: #e5e7eb;
+}
+
 .logged-climbs {
     width: fit-content;
     overflow-y: scroll;
@@ -42,7 +59,6 @@
     z-index: -1;
     margin-bottom: 64px;
 }
-.
 
 @media only screen and (min-width: 600px) {
     .climbs-profile {

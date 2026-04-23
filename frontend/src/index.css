@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --color-surface: #f7f8f0;
+    --color-surface-alt: #EDCDB7;
+    --color-card: #ECEDED;
+    --color-ink: #111111;
+    --color-surface-dark: #0f172a;
+    --color-surface-alt-dark: #1e293b;
+    --color-card-dark: #0b1220;
+    --color-ink-dark: #e5e7eb;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+html.dark {
+    color-scheme: dark;
+}

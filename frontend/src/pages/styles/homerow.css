@@ -13,6 +13,22 @@
     z-index:3;
 }
 
+html.dark .home-row {
+    background-color: #1e293b;
+    border-top-color: #e5e7eb;
+    color: #e5e7eb;
+}
+
+html.dark .home-row svg {
+    color: #e5e7eb;
+}
+
+.theme-toggle-wrap {
+    margin-left: 10vw;
+    display: flex;
+    align-items: center;
+}
+
 .home-button {
     display: flex;
     flex-direction: row;
@@ -67,6 +83,16 @@
 
     .profile-button {
         margin-left: 20px;
+    }
+
+    .theme-toggle-wrap {
+        margin-left: 20px;
+        margin-top: auto;
+        margin-bottom: 16px;
+    }
+
+    html.dark .home-row {
+        border-right-color: #e5e7eb;
     }
 }
 

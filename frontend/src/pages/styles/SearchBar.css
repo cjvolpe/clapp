@@ -20,6 +20,29 @@
     height: fit-content;
 }
 
+html.dark .search-bar {
+    background-color: #1e293b;
+    border-color: #e5e7eb;
+    color: #e5e7eb;
+}
+
+html.dark .search-bar input {
+    color: #e5e7eb;
+}
+
+html.dark .search-bar input::placeholder {
+    color: #94a3b8;
+}
+
+html.dark .search-bar svg {
+    color: #e5e7eb;
+}
+
+html.dark .filter.enabled {
+    background-color: #334155;
+    border-color: #e5e7eb;
+}
+
 .search-bar input {
     flex: 1;
     border: none;
