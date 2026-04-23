@@ -1,0 +1,122 @@
+.leaderboard-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    padding-bottom: 96px;
+}
+
+.leaderboard-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 3px solid black;
+    background-color: #EDCDB7;
+    padding: 12px 24px;
+    margin: 16px 0;
+    text-align: center;
+}
+
+.leaderboard-heading h1 {
+    margin: 0;
+}
+
+.leaderboard-subtitle {
+    margin: 4px 0 0 0;
+    font-size: 0.9rem;
+}
+
+.leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.leaderboard-error {
+    color: #b00020;
+    text-align: center;
+}
+
+.leaderboard-row {
+    display: grid;
+    grid-template-columns: 48px 56px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 3px solid black;
+    background-color: #FAEBD7;
+}
+
+.leaderboard-row.rank-1 {
+    background-color: #FFD86B;
+}
+
+.leaderboard-row.rank-2 {
+    background-color: #DCDCDC;
+}
+
+.leaderboard-row.rank-3 {
+    background-color: #E1A77A;
+}
+
+.leaderboard-rank {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.leaderboard-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #EDCDB7;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.leaderboard-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-fallback {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.leaderboard-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.leaderboard-count {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1;
+}
+
+.count-number {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.count-label {
+    font-size: 0.75rem;
+    margin-top: 2px;
+}
+
+@media only screen and (min-width: 1500px) {
+    .leaderboard-page {
+        margin-left: 150px;
+    }
+}

@@ -28,6 +28,13 @@ export interface Log {
     climb: number;
 }
 
+export interface LeaderboardEntry {
+    userId: string;
+    name: string | null;
+    avatarUrl: string | null;
+    count: number;
+}
+
 export const BACKEND_URL: string = 'http://localhost:8000';
 export const FRONTEND_URL: string = 'http://localhost:5173';
 

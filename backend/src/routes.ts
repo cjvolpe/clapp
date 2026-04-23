@@ -11,7 +11,8 @@ import {
     type Climb,
     type Search,
     ROPE_GRADES,
-    BOULDER_GRADES, type Log
+    BOULDER_GRADES, type Log,
+    type LeaderboardEntry
 } from "../../frontend/src/lib/types.ts";
 
 //TODO: add post request for claiming a set climb, and ticking a climb
@@ -68,6 +69,13 @@ export function setupRoutes(server: FastifyInstance) {
     }>("/climbs/log", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleLog(req.body));
         res.status(code).send(reply);
+    });
+
+    server.get<{
+        Reply: BaseReply<LeaderboardEntry[]>;
+    }>("/leaderboard", async (_req, res) => {
+        const {reply, code} = await packageResponse(() => handleLeaderboard());
+        return res.status(code).send(reply);
     });
 
     async function handleFeaturedClimbs(): Promise<Task> {
@@ -210,6 +218,72 @@ export function setupRoutes(server: FastifyInstance) {
                 return gradeList.filter(grade => BOULDER_GRADES[grade] <= BOULDER_GRADES[filterGrade]);
             }
         }
+    }
+
+    async function handleLeaderboard(): Promise<Process<LeaderboardEntry[]>> {
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        const {data, error} = await server.supabase
+            .from("completed_climbs")
+            .select("climber, created_at")
+            .gte("created_at", thirtyDaysAgo.toISOString());
+
+        if (error) {
+            return {success: false, error: error, code: 500};
+        }
+
+        const counts = new Map<string, number>();
+        for (const row of data ?? []) {
+            const climber: string | null = (row as {climber?: string}).climber ?? null;
+            if (!climber) continue;
+            counts.set(climber, (counts.get(climber) ?? 0) + 1);
+        }
+
+        const climberIds = [...counts.keys()];
+        const profiles = new Map<string, {name: string | null, avatarUrl: string | null}>();
+
+        const adminAuth = (server.supabase.auth as unknown as {
+            admin?: { getUserById: (id: string) => Promise<{ data: { user: any } | null, error: any }> }
+        }).admin;
+
+        if (adminAuth?.getUserById) {
+            const results = await Promise.all(climberIds.map(async (id) => {
+                try {
+                    const {data: userData, error: userError} = await adminAuth.getUserById(id);
+                    if (userError || !userData?.user) return [id, null] as const;
+                    const meta = (userData.user.user_metadata ?? {}) as Record<string, unknown>;
+                    const name = (meta.name as string | undefined)
+                        ?? (meta.full_name as string | undefined)
+                        ?? (meta.user_name as string | undefined)
+                        ?? (userData.user.email as string | undefined)
+                        ?? null;
+                    const avatarUrl = (meta.avatar_url as string | undefined)
+                        ?? (meta.picture as string | undefined)
+                        ?? null;
+                    return [id, {name, avatarUrl}] as const;
+                } catch {
+                    return [id, null] as const;
+                }
+            }));
+            for (const [id, profile] of results) {
+                if (profile) profiles.set(id, profile);
+            }
+        }
+
+        const entries: LeaderboardEntry[] = climberIds
+            .map((userId) => {
+                const profile = profiles.get(userId);
+                return {
+                    userId,
+                    name: profile?.name ?? null,
+                    avatarUrl: profile?.avatarUrl ?? null,
+                    count: counts.get(userId) ?? 0,
+                };
+            })
+            .sort((a, b) => b.count - a.count);
+
+        return {success: true, data: entries};
     }
 
     async function handleLog(req: Log): Promise<Task> {

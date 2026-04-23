@@ -9,6 +9,7 @@ import ProtectedRoute from "./../components/ProtectedRoute";
 import Home from "./home.tsx";
 import LogClimb from "./newclimb.tsx";
 import Profile from "./profile.tsx";
+import Leaderboard from "./leaderboard.tsx";
 
 function Root() {
     const [session, setSession] = useState<Session | null>(null);
@@ -53,6 +54,14 @@ function Root() {
                 element={
                     <ProtectedRoute session={session}>
                         <Profile/>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/leaderboard"
+                element={
+                    <ProtectedRoute session={session}>
+                        <Leaderboard/>
                     </ProtectedRoute>
                 }
             />
