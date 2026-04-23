@@ -11,7 +11,8 @@ import {
     type Climb,
     type Search,
     ROPE_GRADES,
-    BOULDER_GRADES, type Log
+    type Log,
+    type ClimbRecord,
 } from "../../frontend/src/lib/types.ts";
 
 //TODO: add post request for claiming a set climb, and ticking a climb
@@ -37,7 +38,7 @@ export function setupRoutes(server: FastifyInstance) {
 
     server.post<{
         Body: Climb;
-        Reply: BaseReply<any[]>;
+        Reply: BaseReply<ClimbRecord[]>;
 
     }>("/climbs/new", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleNewClimb(req.body));
@@ -52,7 +53,7 @@ export function setupRoutes(server: FastifyInstance) {
 
     server.post<{
         Body: Search;
-        Reply: BaseReply<any[]>;
+        Reply: BaseReply<ClimbRecord[]>;
     }>("/climbs/search/filter", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleFilteredSearch(req.body));
         res.status(code).send(reply);
