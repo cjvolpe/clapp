@@ -18,19 +18,31 @@ import {
 export function setupRoutes(server: FastifyInstance) {
     server.get<{
         Reply: any[] | { error: string };
-    }>("/featured", async (req, res) => {
+    }>("/featured", {
+        config: {
+            rateLimit: { max: 60, timeWindow: '1 minute' },
+        }
+    }, async (req, res) => {
         const {reply: result, code} = await packageResponse(() => handleFeaturedClimbs());
         return res.status(code).send(result);
     });
     server.get<{
         Reply: any[] | { error: string };
-    }>("/climbs/logged/:uuid", async (req, res) => {
+    }>("/climbs/logged/:uuid", {
+        config: {
+            rateLimit: { max: 60, timeWindow: '1 minute' },
+        }
+    }, async (req, res) => {
         const {reply: result, code} = await packageResponse(() => handleLoggedClimbs(req.params));
         return res.status(code).send(result);
     });
     server.get<{
         Reply: any[] | { error: string };
-    }>("/climbs", async (req, res) => {
+    }>("/climbs", {
+        config: {
+            rateLimit: { max: 60, timeWindow: '1 minute' },
+        }
+    }, async (req, res) => {
         const {reply: result, code} = await packageResponse(() => handleGetClimbs());
         return res.status(code).send(result);
     });
@@ -38,13 +50,20 @@ export function setupRoutes(server: FastifyInstance) {
     server.post<{
         Body: Climb;
         Reply: BaseReply<void>;
-
-    }>("/climbs/new", async (req, res) => {
+    }>("/climbs/new", {
+        config: {
+            rateLimit: { max: 60, timeWindow: '1 minute' },
+        }
+    }, async (req, res) => {
         const {reply, code} = await packageResponse(() => handleNewClimb(req.body));
         res.status(code).send(reply);
     });
 
-    server.patch('/climbs/archive/:id', async (req, res) => {
+    server.patch('/climbs/archive/:id', {
+        config: {
+            rateLimit: { max: 60, timeWindow: '1 minute' },
+        }
+    }, async (req, res) => {
         const {reply, code} = await packageResponse(() => handleArchive(req.params));
         res.status(code).send(reply);
 
@@ -53,7 +72,11 @@ export function setupRoutes(server: FastifyInstance) {
     server.post<{
         Body: Search;
         Reply: BaseReply<void>;
-    }>("/climbs/search/filter", async (req, res) => {
+    }>("/climbs/search/filter", {
+        config: {
+            rateLimit: { max: 60, timeWindow: '1 minute' },
+        }
+    }, async (req, res) => {
         const {reply, code} = await packageResponse(() => handleFilteredSearch(req.body));
         res.status(code).send(reply);
     });
@@ -65,7 +88,11 @@ export function setupRoutes(server: FastifyInstance) {
             climb: number
         };
         Reply: BaseReply<void>;
-    }>("/climbs/log", async (req, res) => {
+    }>("/climbs/log", {
+        config: {
+            rateLimit: { max: 60, timeWindow: '1 minute' },
+        }
+    }, async (req, res) => {
         const {reply, code} = await packageResponse(() => handleLog(req.body));
         res.status(code).send(reply);
     });
