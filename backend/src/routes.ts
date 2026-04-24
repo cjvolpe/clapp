@@ -12,12 +12,12 @@ import {
     type Search,
     ROPE_GRADES,
     BOULDER_GRADES, type Log
-} from "../../frontend/src/lib/types.ts";
+} from "../../frontend/src/lib/types.js";
 
 //TODO: add post request for claiming a set climb, and ticking a climb
 export function setupRoutes(server: FastifyInstance) {
     server.get<{
-        Reply: any[] | { error: string };
+        Reply: BaseReply<any[]>;
     }>("/featured", {
         config: {
             rateLimit: { max: 60, timeWindow: '1 minute' },
@@ -27,7 +27,8 @@ export function setupRoutes(server: FastifyInstance) {
         return res.status(code).send(result);
     });
     server.get<{
-        Reply: any[] | { error: string };
+        Params: { uuid?: string };
+        Reply: BaseReply<any[]>;
     }>("/climbs/logged/:uuid", {
         config: {
             rateLimit: { max: 60, timeWindow: '1 minute' },
@@ -37,7 +38,7 @@ export function setupRoutes(server: FastifyInstance) {
         return res.status(code).send(result);
     });
     server.get<{
-        Reply: any[] | { error: string };
+        Reply: BaseReply<any[]>;
     }>("/climbs", {
         config: {
             rateLimit: { max: 60, timeWindow: '1 minute' },
@@ -49,7 +50,7 @@ export function setupRoutes(server: FastifyInstance) {
 
     server.post<{
         Body: Climb;
-        Reply: BaseReply<void>;
+        Reply: BaseReply<any[]>;
     }>("/climbs/new", {
         config: {
             rateLimit: { max: 60, timeWindow: '1 minute' },
@@ -59,7 +60,9 @@ export function setupRoutes(server: FastifyInstance) {
         res.status(code).send(reply);
     });
 
-    server.patch('/climbs/archive/:id', {
+    server.patch<{
+        Params: { id?: string };
+    }>('/climbs/archive/:id', {
         config: {
             rateLimit: { max: 60, timeWindow: '1 minute' },
         }
@@ -71,7 +74,7 @@ export function setupRoutes(server: FastifyInstance) {
 
     server.post<{
         Body: Search;
-        Reply: BaseReply<void>;
+        Reply: BaseReply<any[]>;
     }>("/climbs/search/filter", {
         config: {
             rateLimit: { max: 60, timeWindow: '1 minute' },
@@ -87,7 +90,7 @@ export function setupRoutes(server: FastifyInstance) {
             user: string,
             climb: number
         };
-        Reply: BaseReply<void>;
+        Reply: BaseReply<any[]>;
     }>("/climbs/log", {
         config: {
             rateLimit: { max: 60, timeWindow: '1 minute' },
@@ -97,7 +100,7 @@ export function setupRoutes(server: FastifyInstance) {
         res.status(code).send(reply);
     });
 
-    async function handleFeaturedClimbs(): Promise<Task> {
+    async function handleFeaturedClimbs(): Promise<Process<any[]>> {
         const twoWeeksAgo = new Date();
         twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
         const query = server.supabase.from("climbs")
@@ -110,7 +113,7 @@ export function setupRoutes(server: FastifyInstance) {
 
     }
 
-    async function handleGetClimbs(): Promise<Task> {
+    async function handleGetClimbs(): Promise<Process<any[]>> {
         const query = server.supabase.from("climbs").select("*");
         const {data, error} = await query;
         if (error) {
@@ -121,7 +124,7 @@ export function setupRoutes(server: FastifyInstance) {
     }
 
 //TODO: Handle pictures
-    async function handleNewClimb(req: Climb): Promise<Task> {
+    async function handleNewClimb(req: Climb): Promise<Process<any[]>> {
         const {name, difficulty, type, color, setter, dateSet, gym} = req;
         const {data, error} = await server.supabase.from("climbs").insert([
             {
@@ -140,7 +143,7 @@ export function setupRoutes(server: FastifyInstance) {
         return {success: true, data: data};
     }
 
-    async function handleArchive(params: { id?: string }): Promise<Task> {
+    async function handleArchive(params: { id?: string }): Promise<Process<any[]>> {
         const {id} = params;
         const {data, error} = await server.supabase.from("climbs").update({archived: true}).eq("id", id).select();
         if (error) {
@@ -150,7 +153,7 @@ export function setupRoutes(server: FastifyInstance) {
 
     }
 
-    async function handleLoggedClimbs(params: { uuid?: string }): Promise<Task> {
+    async function handleLoggedClimbs(params: { uuid?: string }): Promise<Process<any[]>> {
         const {uuid} = params;
         const {data, error} = await server.supabase.from("completed_climbs").select(`
             *,
@@ -162,7 +165,7 @@ export function setupRoutes(server: FastifyInstance) {
     }
 
 //TODO: remove for loop
-    async function handleFilteredSearch(req: Search): Promise<Task> {
+    async function handleFilteredSearch(req: Search): Promise<Process<any[]>> {
         const {lowerDifficulty, upperDifficulty, type, color, startDate, endDate, gym, archived} = req;
         const query = server.supabase.from("climbs").select('*');
         let boulderList: string[] = Object.keys(BOULDER_GRADES);
@@ -223,23 +226,24 @@ export function setupRoutes(server: FastifyInstance) {
         return {success: true, data: data};
     }
 
-    function sortByGrade(type: string, bound: string, filterGrade: string, gradeList: string[]) {
+    function sortByGrade(type: string, bound: string, filterGrade: string, gradeList: string[]): string[] {
         if (type === "Top Rope") {
             if (bound === "lower") {
-                return gradeList.filter(grade => ROPE_GRADES[grade] >= ROPE_GRADES[filterGrade]);
+                return gradeList.filter(grade => ROPE_GRADES[grade]! >= ROPE_GRADES[filterGrade]!);
             } else if (bound === "upper") {
-                return gradeList.filter(grade => ROPE_GRADES[grade] <= ROPE_GRADES[filterGrade]);
+                return gradeList.filter(grade => ROPE_GRADES[grade]! <= ROPE_GRADES[filterGrade]!);
             }
         } else if (type === "Boulder") {
             if (bound === "lower") {
-                return gradeList.filter(grade => BOULDER_GRADES[grade] >= BOULDER_GRADES[filterGrade]);
+                return gradeList.filter(grade => BOULDER_GRADES[grade]! >= BOULDER_GRADES[filterGrade]!);
             } else if (bound === "upper") {
-                return gradeList.filter(grade => BOULDER_GRADES[grade] <= BOULDER_GRADES[filterGrade]);
+                return gradeList.filter(grade => BOULDER_GRADES[grade]! <= BOULDER_GRADES[filterGrade]!);
             }
         }
+        return gradeList;
     }
 
-    async function handleLog(req: Log): Promise<Task> {
+    async function handleLog(req: Log): Promise<Process<any[]>> {
         const {user, climb} = req;
         const {data, error} = await server.supabase.from("completed_climbs").insert([{
             climber: user,
