@@ -25,3 +25,13 @@ dist-ssr
 
 #API Keys
 /backend/.env.development
+
+# TypeScript compiled output
+backend/src/*.js
+backend/src/*.js.map
+backend/src/*.d.ts
+backend/src/*.d.ts.map
+frontend/src/lib/types.js
+frontend/src/lib/types.js.map
+frontend/src/lib/types.d.ts
+frontend/src/lib/types.d.ts.map
