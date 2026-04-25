@@ -1,3 +1,18 @@
+export interface ClimbRecord {
+    id: number;
+    name: string;
+    difficulty: string;
+    type: string;
+    color: string;
+    setter: string;
+    date_set: string;
+    gym: string;
+    picture: string | null;
+    archived: boolean;
+    claimed: boolean;
+    created_at: string;
+}
+
 export interface Climb {
     name: string;
     difficulty: string;

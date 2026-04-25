@@ -11,7 +11,8 @@ import {
     type Climb,
     type Search,
     ROPE_GRADES,
-    BOULDER_GRADES, type Log
+    type Log,
+    type ClimbRecord,
 } from "../../frontend/src/lib/types.ts";
 
 //TODO: add post request for claiming a set climb, and ticking a climb
@@ -37,7 +38,7 @@ export function setupRoutes(server: FastifyInstance) {
 
     server.post<{
         Body: Climb;
-        Reply: BaseReply<void>;
+        Reply: BaseReply<ClimbRecord[]>;
 
     }>("/climbs/new", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleNewClimb(req.body));
@@ -52,7 +53,7 @@ export function setupRoutes(server: FastifyInstance) {
 
     server.post<{
         Body: Search;
-        Reply: BaseReply<void>;
+        Reply: BaseReply<ClimbRecord[]>;
     }>("/climbs/search/filter", async (req, res) => {
         const {reply, code} = await packageResponse(() => handleFilteredSearch(req.body));
         res.status(code).send(reply);
@@ -94,7 +95,7 @@ export function setupRoutes(server: FastifyInstance) {
     }
 
 //TODO: Handle pictures
-    async function handleNewClimb(req: Climb): Promise<Task> {
+    async function handleNewClimb(req: Climb): Promise<Process<ClimbRecord[]>> {
         const {name, difficulty, type, color, setter, dateSet, gym} = req;
         const {data, error} = await server.supabase.from("climbs").insert([
             {
@@ -135,7 +136,7 @@ export function setupRoutes(server: FastifyInstance) {
     }
 
 //TODO: remove for loop
-    async function handleFilteredSearch(req: Search): Promise<Task> {
+    async function handleFilteredSearch(req: Search): Promise<Process<ClimbRecord[]>> {
         const {lowerDifficulty, upperDifficulty, type, color, startDate, endDate, gym, archived} = req;
         const query = server.supabase.from("climbs").select('*');
         let boulderList: string[] = Object.keys(BOULDER_GRADES);
