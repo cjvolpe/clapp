@@ -1,89 +1,88 @@
 .add-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 16px;
-    margin-bottom: 32px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-top: 16px;
+	margin-bottom: 32px;
 }
 
 .color-selector {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 
 .add-page h1 {
-    font-size: 36px;
-    margin: 16px;
+	font-size: 36px;
+	margin: 16px;
 }
 
 .add-page form {
-    padding: 20px;
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+	padding: 20px;
+	border-radius: 16px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .add-form input {
-    border: 2px solid black;
-    border-radius: 16px;
-    outline: none;
-    background-color: #ECEDED;
-    padding: 6px 10px;
-    width: 100%;
+	border: 2px solid black;
+	border-radius: 16px;
+	outline: none;
+	background-color: #eceded;
+	padding: 6px 10px;
+	width: 100%;
 }
 
 .add-form select {
-    border: 2px solid black;
-    border-radius: 16px;
-    outline: none;
-    background-color: #ECEDED;
-    padding: 6px 10px;
-    width: 100%;
-
+	border: 2px solid black;
+	border-radius: 16px;
+	outline: none;
+	background-color: #eceded;
+	padding: 6px 10px;
+	width: 100%;
 }
 
 .add-form-button {
-    border: 2px black solid;
-    border-radius: 16px;
-    padding: 6px 10px;
-    margin: 24px 0;
-    width: 100%;
-    background-color: #EDCDB7;
+	border: 2px black solid;
+	border-radius: 16px;
+	padding: 6px 10px;
+	margin: 24px 0;
+	width: 100%;
+	background-color: #edcdb7;
 }
 
 .add-form p {
-    font-weight: bold;
-    width: 100%;
-    margin: 16px 0 4px 0;
+	font-weight: bold;
+	width: 100%;
+	margin: 16px 0 4px 0;
 }
 
 .add-page h1 {
-    background-color: #EDCDB7;
-    padding: 6px 10px;
-    border: 3px solid black;
+	background-color: #edcdb7;
+	padding: 6px 10px;
+	border: 3px solid black;
 }
 
 .cooler-circle {
-    border: 2px solid black;
-    width: 32px;
-    height: 32px;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    margin: 8px;
+	border: 2px solid black;
+	width: 32px;
+	height: 32px;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	margin: 8px;
 }
 
 .color-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 @media only screen and (min-width: 768px) {
-    .add-form-fields {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px 16px;
-    }
+	.add-form-fields {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 8px 16px;
+	}
 }

@@ -1,97 +1,95 @@
 .advanced-search-bar.show {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: fixed;
-    top: 8%;
-    width: fit-content;
-    height: fit-content;
-    background-color: #EDCDB7;
-    border: 3px solid black;
-    border-radius: 16px;
-    padding: 16px;
-    z-index:10;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: fixed;
+	top: 8%;
+	width: fit-content;
+	height: fit-content;
+	background-color: #edcdb7;
+	border: 3px solid black;
+	border-radius: 16px;
+	padding: 16px;
+	z-index: 10;
 }
 
 .filter {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .advanced-search-bar input {
-    border: 2px black solid;
-    border-radius: 16px;
-    outline: none;
-    margin: 8px;
-    background-color: #ECEDED;
-    padding: 6px 10px;
+	border: 2px black solid;
+	border-radius: 16px;
+	outline: none;
+	margin: 8px;
+	background-color: #eceded;
+	padding: 6px 10px;
 }
 
 .advanced-search-bar select {
-    border: 2px black solid;
-    border-radius: 16px;
-    outline: none;
-    margin: 8px;
-    background-color: #ECEDED;
-    padding: 6px 10px;
-    width: fit-content;
+	border: 2px black solid;
+	border-radius: 16px;
+	outline: none;
+	margin: 8px;
+	background-color: #eceded;
+	padding: 6px 10px;
+	width: fit-content;
 }
 
 .advanced-search-bar-buttons {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
 }
 
 .advanced-search-bar button {
-    border: 2px black solid;
-    border-radius: 16px;
-    padding: 6px 10px;
-    width: fit-content;
-    margin: 5px;
+	border: 2px black solid;
+	border-radius: 16px;
+	padding: 6px 10px;
+	width: fit-content;
+	margin: 5px;
 }
 
 .advanced-search-bar p {
-    font-weight: bold;
-    width: fit-content;
+	font-weight: bold;
+	width: fit-content;
 }
 
 .advanced-search-bar.hidden {
-    display: none;
+	display: none;
 }
 
 .filter-r1 {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 
 .filter-r2 {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 
 .archived-climbs {
-    display: flex;
-    flex-direction: row;
-    border: 2px solid black;
-    width: fit-content;
+	display: flex;
+	flex-direction: row;
+	border: 2px solid black;
+	width: fit-content;
 }
 
 .archived-climbs input {
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
 }
 
 .archived-climbs p {
-    border: none;
+	border: none;
 }
 
 @media only screen and (min-width: 768px) {
-
 }
 
 @media only screen and (min-width: 1200px) {
-
 }

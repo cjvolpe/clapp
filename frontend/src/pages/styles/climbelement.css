@@ -1,83 +1,81 @@
 @media (min-width: 600px) {
-    .climb-container {
-        height: fit-content;
-
-    }
+	.climb-container {
+		height: fit-content;
+	}
 }
 
 @media (min-width: 768px) {
-    .climb-container {
-        height: 150px;
-        gap: 0;
-    }
+	.climb-container {
+		height: 150px;
+		gap: 0;
+	}
 }
 
 .climb-container {
-    display: flex;
-    border-radius: 16px;
-    width: 280px;
-    margin: 8px;
-    background-color: #ECEDED;
-    border: 2px solid black;
-
+	display: flex;
+	border-radius: 16px;
+	width: 280px;
+	margin: 8px;
+	background-color: #eceded;
+	border: 2px solid black;
 }
 
 .climb-container.highlighted {
-    outline: 3px solid #3498db;
-    outline-offset: 2px;
-    border-color: #3498db;
+	outline: 3px solid #3498db;
+	outline-offset: 2px;
+	border-color: #3498db;
 }
 
 h1 {
-    margin: 6px;
-    font-size: 24px;
+	margin: 6px;
+	font-size: 24px;
 }
 
 p {
-    margin: 4px;
+	margin: 4px;
 }
 
 .location {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 .location p {
-    margin: 4px;
+	margin: 4px;
 }
 
 .climb-left-column {
-    display: grid;
-    grid-template-rows: repeat(3, .75fr);
-    padding: 2px;
-    margin-left: 4px;
-    border-radius: 18px;
-    width: 66%;
-    overflow: auto;
-    scrollbar-width: none;
+	display: grid;
+	grid-template-rows: repeat(3, 0.75fr);
+	padding: 2px;
+	margin-left: 4px;
+	border-radius: 18px;
+	width: 66%;
+	overflow: auto;
+	scrollbar-width: none;
 }
 
 .climb-right-column {
-    display: grid;
-    grid-template-rows: repeat(3, 1fr);
-    margin-left: auto;
-    border-radius: 18px;
-    margin-right: 4px;
-    justify-items: end;
+	display: grid;
+	grid-template-rows: repeat(3, 1fr);
+	margin-left: auto;
+	border-radius: 18px;
+	margin-right: 4px;
+	justify-items: end;
 }
 
 .climb-right-column h1 {
-    margin: 10px;
+	margin: 10px;
 }
 
 .cooler-circle {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 .climb-right-column h4 {
-    padding: 8px 8px 0 8px;
-    height: fit-content;
+	padding: 8px 8px 0 8px;
+	height: fit-content;
 }

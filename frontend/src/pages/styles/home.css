@@ -1,68 +1,68 @@
 @media only screen and (min-width: 600px) {
-    .climbs {
-        display: flex;
-        flex-direction: column;
-    }
+	.climbs {
+		display: flex;
+		flex-direction: column;
+	}
 }
 
 @media only screen and (min-width: 768px) {
-    .climbs {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-auto-rows: min-content;
-    }
+	.climbs {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-auto-rows: min-content;
+	}
 }
 
 @media only screen and (min-width: 992px) {
-    .climbs {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-auto-rows: min-content;
-    }
+	.climbs {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-auto-rows: min-content;
+	}
 }
 
 @media only screen and (min-width: 1200px) {
-    .climbs {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-auto-rows: min-content;
-    }
+	.climbs {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		grid-auto-rows: min-content;
+	}
 }
 
 .home-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 body {
-    background-color: #B7D7ED;
+	background-color: #b7d7ed;
 }
 
 .climbs {
-    width: fit-content;
-    overflow-y: scroll;
-    scrollbar-width: none;
-    z-index: 1;
-    padding: 8px;
-    margin: 56px 16px;
+	width: fit-content;
+	overflow-y: scroll;
+	scrollbar-width: none;
+	z-index: 1;
+	padding: 8px;
+	margin: 56px 16px;
 }
 
 .log-button.hidden {
-    display: none;
+	display: none;
 }
 
 .log-button {
-    position: fixed;
-    bottom: 80px;
-    padding: 16px 24px;
-    border-radius: 32px;
-    font-weight: 600;
-    font-size: 20px;
-    z-index: 4;
-    background-color: #EDCDB7;
-    border: 2px black solid;
+	position: fixed;
+	bottom: 80px;
+	padding: 16px 24px;
+	border-radius: 32px;
+	font-weight: 600;
+	font-size: 20px;
+	z-index: 4;
+	background-color: #edcdb7;
+	border: 2px black solid;
 }
 
 /*.toast{*/

@@ -1,62 +1,61 @@
 * {
-    font-size: 16px;
+	font-size: 16px;
 }
 
 .search-bar {
-    position: fixed;
-    z-index: 3;
-    top: 0;
-    margin: 16px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    background-color: #EDCDB7;
-    border: 2px black solid;
-    border-radius: 16px;
-    padding: 6px 10px;
-    gap: 16px;
-    width: 300px;
-    height: fit-content;
+	position: fixed;
+	z-index: 3;
+	top: 0;
+	margin: 16px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	background-color: #edcdb7;
+	border: 2px black solid;
+	border-radius: 16px;
+	padding: 6px 10px;
+	gap: 16px;
+	width: 300px;
+	height: fit-content;
 }
 
 .search-bar input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    margin: 0;
+	flex: 1;
+	border: none;
+	outline: none;
+	background: transparent;
+	margin: 0;
 }
 
 .filter.enabled {
-    background-color: white;
-    border: 2px black solid;
+	background-color: white;
+	border: 2px black solid;
 }
 
 .search-bar svg {
-    width: 24px;
-    height: 24px;
+	width: 24px;
+	height: 24px;
 }
 
 .search-bar form {
-    display: flex;
-    flex: 1;
+	display: flex;
+	flex: 1;
 }
 
 @media only screen and (min-width: 768px) {
-    .search-bar {
-        border-radius: 16px;
-        padding: 8px 12px;
-        gap: 16px;
-        width: 500px;
-        height: fit-content;
-        font-size: 20px;
-    }
-
+	.search-bar {
+		border-radius: 16px;
+		padding: 8px 12px;
+		gap: 16px;
+		width: 500px;
+		height: fit-content;
+		font-size: 20px;
+	}
 }
 
 @media only screen and (min-width: 1200px) {
-    .search-bar {
-        width: 700px;
-    }
+	.search-bar {
+		width: 700px;
+	}
 }
