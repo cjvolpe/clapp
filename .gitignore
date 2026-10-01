@@ -25,3 +25,21 @@ dist-ssr
 
 #API Keys
 /backend/.env.development
+
+
+backend/src/bootstrap.d.ts
+backend/src/bootstrap.d.ts.map
+backend/src/bootstrap.js
+backend/src/bootstrap.js.map
+backend/src/routes.d.ts
+backend/src/routes.d.ts.map
+backend/src/routes.js
+backend/src/routes.js.map
+backend/src/server.d.ts
+backend/src/server.d.ts.map
+backend/src/server.js
+backend/src/server.js.map
+backend/src/supabase.d.ts
+backend/src/supabase.d.ts.map
+backend/src/supabase.js
+backend/src/supabase.js.map
