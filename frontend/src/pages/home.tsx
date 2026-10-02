@@ -108,17 +108,26 @@ export default function Home() {
 	const onFilter = () => {
 		setFilter(!filter);
 	};
-	const onAdvSearch = async (body: Search) => {
-		if (body === undefined) {
+	const onAdvSearch = async (search: Search) => {
+		if (search === undefined) {
 			setAdvSearch(undefined);
 			return;
 		}
-		console.log("AdvSearch", body);
-		const response = await fetch(`${BACKEND_URL}/climbs/search/filter`, {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(body),
+		
+		const params = new URLSearchParams();
+
+		Object.entries(search).forEach(([key, value])=>{
+			if (
+				value !== undefined &&
+				value !== null &&
+				value !== "" &&
+				value !== "Any"
+			){
+				params.append(key,String(value))
+			}
 		});
+		const response = await fetch(`${BACKEND_URL}/climbs/search/filter?${params.toString()}`);
+		
 		const data = await response.json();
 		console.log("adv return", data);
 		if (data.success) {
